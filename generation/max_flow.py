@@ -5,7 +5,7 @@ from connectivity_ import if_connected
 import random
 
 def find_maximum_flow(G, source, sink):
-    flow_value, _ = nx.maximum_flow(G, source, sink, capacity='weight')
+    flow_value, flow_dict = nx.maximum_flow(G, source, sink, capacity='weight')
     return flow_value
 
 def flow_datasets_generation(config):

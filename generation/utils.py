@@ -3,6 +3,7 @@ import argparse
 import json
 from transformers import LlamaTokenizer
 import os
+import networkx as nx
 
 def load_yaml(dir):
     with open(dir, "r") as stream:
@@ -24,13 +25,19 @@ def write_to_file(file_name, data):
 def graph_details(G):
     num_nodes = G.number_of_nodes()
     edges = G.edges()
-    edges_flat = " ".join(str(edge) for edge in edges)
+    if isinstance(G, nx.DiGraph):
+        edges_flat = " ".join(f"({i}->{j})" for i, j in edges)
+    else:
+        edges_flat = " ".join(str(edge) for edge in edges)
     return num_nodes, edges_flat
 
 def graph_details_with_weight(G):
     num_nodes = G.number_of_nodes()
     edges_with_weights = [(u, v, d.get('weight', 1)) for u, v, d in G.edges(data=True)]
-    edges_flat = " ".join(f"({u},{v},{w})" for u, v, w in edges_with_weights)
+    if isinstance(G, nx.DiGraph):
+        edges_flat = " ".join(f"({u}->{v},{w})" for u, v, w in edges_with_weights)
+    else:
+        edges_flat = " ".join(f"({u},{v},{w})" for u, v, w in edges_with_weights)
     return num_nodes, edges_flat
 
 def graph_details_with_nodes_weight(G):

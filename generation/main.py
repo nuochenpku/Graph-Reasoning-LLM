@@ -1,4 +1,3 @@
-from gen_random_graph import create_random_graph, create_random_bipartite_graph, create_smaller_graph, create_random_graph_node_weights
 from connectivity_ import if_connected, connect_datasets_generation
 from cycle_ import if_cyclic, cycle_datasets_generation
 from shortest import shortest_path, shortest_datasets_generation
@@ -8,10 +7,8 @@ from diameter import diameter, diameter_datasets_generation
 from max_triplet import maximum_triplet_sum, triplet_datasets_generation
 from max_flow import find_maximum_flow, flow_datasets_generation
 from hamilton_ import hamiltonian_path, hamiltonian_datasets_generation
-from substructure import count_subgraph_occurrences
-import random
+from substructure import count_subgraph_occurrences, substruc_datasets_generation
 from utils import load_yaml, build_args, write_to_file
-import networkx as nx
 import os
 
 
@@ -38,6 +35,8 @@ def main():
         triplet_datasets_generation(task_config)
     elif "topology" in args.task:
         topology_datasets_generation(task_config)
+    elif "substructure" in args.task:
+        substruc_datasets_generation(task_config)
 
 if __name__ == "__main__":
     main()
