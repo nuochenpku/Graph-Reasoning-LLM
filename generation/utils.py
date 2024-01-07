@@ -49,4 +49,4 @@ def graph_details_with_nodes_weight(G):
     return num_nodes, nodes_flat, edges_flat
 
 def getTokenizer():
-    return LlamaTokenizer.from_pretrained("/data/Llama-2-7b-hf")
+    return LlamaTokenizer.from_pretrained("/cpfs/user/chennuo/CN/llama-2-7b")
