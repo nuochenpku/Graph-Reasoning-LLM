@@ -35,11 +35,16 @@ def hamiltonian_datasets_generation(config):
         weight = config["weight"][i]
         directed = config["directed"][i]
         valid = 0
+        dup = set()
         while 1:
             random_graph = create_random_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             path = hamiltonian_path(random_graph)
             node_nums, edges_flat = graph_details(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
+            # duplicate check
+            if input_prompt in dup:
+                continue
+            dup.add(input_prompt)
             if path == "No path found":
                 ans = config["answer"].format("No")
             else:
