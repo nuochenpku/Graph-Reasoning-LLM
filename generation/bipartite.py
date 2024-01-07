@@ -16,11 +16,16 @@ def bipartite_datasets_generation(config):
         weight = config["weight"][i]
         directed = config["directed"][i]
         valid = 0
+        dup = set()
         while 1:
             random_graph = create_random_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             bi = if_bipartite(random_graph)
             node_nums, edges_flat = graph_details(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
+            # duplicate check
+            if input_prompt in dup:
+                continue
+            dup.add(input_prompt)
             if bi:
                 ans = config["answer"].format("Yes")
             else:
@@ -37,11 +42,16 @@ def bipartite_datasets_generation(config):
                 break
         
         valid = 0
+        dup = set()
         while 1:
             random_graph = create_random_bipartite_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             bi = if_bipartite(random_graph)
             node_nums, edges_flat = graph_details(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
+            # duplicate check
+            if input_prompt in dup:
+                continue
+            dup.add(input_prompt)
             if bi:
                 ans = config["answer"].format("Yes")
             else:

@@ -17,6 +17,7 @@ def connect_datasets_generation(config):
         weight = config["weight"][i]
         directed = config["directed"][i]
         valid = 0
+        dup = set()
         while 1:
             random_graph = create_random_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             nodes = list(random_graph.nodes())
@@ -24,6 +25,10 @@ def connect_datasets_generation(config):
             connectivity = if_connected(random_graph, random_nodes[0], random_nodes[1])
             node_nums, edges_flat = graph_details(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat, random_nodes[0], random_nodes[1])
+            # duplicate check
+            if input_prompt in dup:
+                continue
+            dup.add(input_prompt)
             if connectivity:
                 ans = config["answer"].format("Yes")
             else:
