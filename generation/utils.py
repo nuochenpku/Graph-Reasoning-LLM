@@ -14,7 +14,6 @@ def build_args():
     parser.add_argument('--task', type=str, default='cycle_train', help='task to perform')
     return parser.parse_args()
 
-
 def write_to_file(file_name, data):
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
     with open(file_name, 'a', encoding='utf-8') as f_converted:
