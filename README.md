@@ -12,7 +12,6 @@ pip -r install requirements.txt
 ```
 cd scripts
 bash generate_all_train_datasets.sh
-bash generate_all_train_datasets.sh
 ```
 
 ## Trl Training
@@ -20,5 +19,8 @@ bash generate_all_train_datasets.sh
 change Llama_path & evaluation file path.
 
 ```
-python training/trl_demo.py
+# dpo
+python training/dpo.py 
+# sft
+python training/sft.py
 ```
