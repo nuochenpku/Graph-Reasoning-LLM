@@ -11,5 +11,5 @@ pip -r install requirements.txt
 
 ```
 cd scripts
-bash bash generate_all_train_datasets.sh
+bash generate_all_train_datasets.sh
 ```
