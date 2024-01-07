@@ -20,11 +20,16 @@ def cycle_datasets_generation(config):
         weight = config["weight"][i]
         directed = config["directed"][i]
         valid = 0
+        dup = set()
         while 1:
             random_graph = create_random_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             cyclic = if_cyclic(random_graph)
             node_nums, edges_flat = graph_details(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
+            # duplicate check
+            if input_prompt in dup:
+                continue
+            dup.add(input_prompt)
             if cyclic:
                 ans = config["answer"].format("Yes")
             else:

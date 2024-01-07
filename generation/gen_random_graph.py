@@ -21,6 +21,9 @@ def create_random_graph(min_nodes, max_nodes, max_edges, minimum, maximum, weigh
     upper_limit_edges = int(maximum * max_possible_edges)
 
     num_edges_to_add = randint(lower_limit_edges, min(upper_limit_edges, max_edges))
+
+    if num_edges_to_add == 0:
+        num_edges_to_add = 1
     
     all_possible_edges = list(combinations(range(num_nodes), 2))
     edges_to_add = sample(all_possible_edges, num_edges_to_add) if num_edges_to_add > 0 else []
@@ -50,6 +53,9 @@ def create_random_bipartite_graph(min_nodes, max_nodes, max_edges, minimum, maxi
     upper_limit_edges = int(maximum * max_possible_edges)
     
     num_edges_to_add = randint(lower_limit_edges, min(upper_limit_edges, max_edges))
+
+    if num_edges_to_add == 0:
+        num_edges_to_add = 1
     
     all_possible_edges = list(product(nodes_set_1, nodes_set_2))
     edges_to_add = sample(all_possible_edges, num_edges_to_add) if num_edges_to_add > 0 else []
@@ -84,6 +90,9 @@ def create_smaller_graph(min_nodes, max_nodes, max_edges, minimum, maximum, weig
     upper_limit_edges = int(maximum * max_possible_edges)
     
     num_edges_to_add = randint(lower_limit_edges, min(upper_limit_edges, max_edges))/2
+
+    if num_edges_to_add == 0:
+        num_edges_to_add = 1
     
     all_possible_edges = list(combinations(range(int(num_nodes)), 2))
     edges_to_add = sample(all_possible_edges, int(num_edges_to_add)) if num_edges_to_add > 0 else []
@@ -118,6 +127,9 @@ def create_random_graph_node_weights(min_nodes, max_nodes, max_edges, minimum, m
     upper_limit_edges = int(maximum * max_possible_edges)
 
     num_edges_to_add = randint(lower_limit_edges, min(upper_limit_edges, max_edges))
+
+    if num_edges_to_add == 0:
+        num_edges_to_add = 1
 
     all_possible_edges = list(permutations(range(num_nodes), 2)) if directed else list(combinations(range(num_nodes), 2))
     edges_to_add = sample(all_possible_edges, num_edges_to_add) if num_edges_to_add > 0 else []

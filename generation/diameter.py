@@ -17,6 +17,7 @@ def diameter_datasets_generation(config):
         weight = config["weight"][i]
         directed = config["directed"][i]
         valid = 0
+        dup = set()
         while 1:
             random_graph = create_random_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             if not nx.is_connected(random_graph):
@@ -24,6 +25,10 @@ def diameter_datasets_generation(config):
             dia = diameter(random_graph)
             node_nums, edges_flat = graph_details_with_weight(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
+            # duplicate check
+            if input_prompt in dup:
+                continue
+            dup.add(input_prompt)
             ans = config["answer"].format(dia)
             # length check
             if len(tokenizer.encode(input_prompt + ans)) > 3000:
