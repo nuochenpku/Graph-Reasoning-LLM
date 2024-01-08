@@ -1,4 +1,5 @@
-Find the maximum sum of the weights of three interconnected nodes. In an undirected graph, [i, k] means that node i has the weight k. (i,j) means that node i and node j are connected with an undirected edge. 
+Find the maximum sum of the weights of three interconnected nodes. 
+In an undirected graph, [i, k] means that node i has the weight k. (i,j) means that node i and node j are connected with an undirected edge. 
 Given a graph, you need to output the maximum sum of the weights of three interconnected nodes. 
 
 Below are several examples:

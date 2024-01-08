@@ -1,7 +1,6 @@
-
 Determine if there is a path between two nodes in the graph. 
 Note that (i,j) means that node i and node j are connected with an undirected edge. 
-Begin with '###' to give your final conclusion.
+Given a graph and a pair of nodes, you need to output Yes or No, indicating whether the node i and node j are connected.
 
 Below are several examples:
 

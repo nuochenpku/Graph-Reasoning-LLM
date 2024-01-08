@@ -23,7 +23,7 @@ def GPT4_Inference(prompt, temp):
   
   return response["choices"][0]["message"]["content"]
 
-with open("../datasets/train_set/hamilton_train.json", "r") as f:
+with open("../datasets/train_set/topology_train.json", "r") as f:
   index = 0
   for line in f.readlines():
     line = json.loads(line)
