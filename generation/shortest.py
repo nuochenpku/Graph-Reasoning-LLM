@@ -24,6 +24,12 @@ def shortest_datasets_generation(config):
             random_graph = create_random_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             nodes = list(random_graph.nodes())
             random_nodes = random.sample(nodes, 2)
+            # edge number check
+            if random_graph.number_of_edges() == 1:
+                continue
+            # edge check
+            if random_graph.has_edge(random_nodes[0], random_nodes[1]):
+                continue
             if if_connected(random_graph, random_nodes[0], random_nodes[1]):
                 path_value = shortest_path(random_graph, random_nodes[0], random_nodes[1])
             else:

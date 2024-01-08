@@ -17,3 +17,18 @@ The first path is through nodes 1, 4, and 3, following the edges (1->4) and (4->
 The second path follows a similar structure, going from node 1 to node 6 and then to node 3, via edges (1->6) and (6->3). 
 These paths mirror the directed connection of subgraph g. 
 Therefore, the count of subgraph g's occurrence in graph G is 2. ### 2.
+Q: The nodes of graph G are numbered from 0 to 9, and the edges are: (0->4) (0->9) (0->2) (0->1) (0->3) (0->7) (0->5) (1->4) (1->7) (1->9) (1->5) (1->2) (1->6) (1->8) (1->3) (2->8) (2->5) (2->9) (2->7) (2->3) (3->8) (3->7) (3->9) (3->5) (3->6) (4->5) (4->7) (4->9) (5->7) (5->8) (5->6) (6->9) (6->8) (7->8) (8->9). The nodes of subgraph g are numbered from 0 to 3, and the edges are: (0->2) (1->2). How many times does subgraph g occur in graph G?
+A: To determine the number of occurrences of subgraph g within graph G, we need to find all instances where the nodes and edges of subgraph g are present in graph G.
+
+The nodes of subgraph g are numbered from 0 to 3, and the edges are: (0->2) and (1->2).
+
+Looking at graph G, we can see that there are multiple instances where these nodes and edges are present:
+
+Instance 1: Nodes 0, 1, 2, and edges (0->2) and (1->2) are present.
+Instance 2: Nodes 1, 3, 2, and edges (1->2) and (3->2) are present.
+Instance 3: Nodes 2, 5, 8, and edges (2->8) and (5->8) are present.
+Instance 4: Nodes 3, 6, 8, and edges (3->8) and (6->8) are present.
+
+Therefore, subgraph g occurs 4 times in graph G.
+### 4
+
