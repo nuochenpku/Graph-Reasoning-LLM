@@ -1,0 +1,19 @@
+Determine the number of occurrences of a directed subgraph g within a directed graph G. 
+In a directed graph, (i->j) means that node i and node j are connected with a directed edge from node i to node j. 
+Given a graph G and a subgraph g, you need to output the number of occurrences of g in G. 
+
+Below are examples:
+
+Q: The nodes of graph G are numbered from 0 to 7, and the edges are: (0->2) (0->3) (0->4) (0->6) (1->2) (1->5) (1->4) (2->7) (2->6) (2->5) (3->6) (3->5) (4->6) (5->7). The nodes of subgraph g are numbered from 0 to 3, and the edges are: (0->1) (0->2). How many times does subgraph g occur in graph G?
+A: In graph G, we look for instances where a single node directs edges to two different nodes, reflecting the structure of subgraph g. 
+Upon detailed examination, we find that node 0 in G has three pairs of edges that mirror subgraph g's structure, creating three occurrences. 
+Additionally, node 1 in G forms a similar pattern with its edges, contributing one more occurrence. 
+Therefore, by analyzing the connections in G and matching them with the pattern in subgraph g, it's determined that subgraph g occurs <<3 + 1 = 4>>4 times in graph G. ### 4. 
+
+Q: The nodes of graph G are numbered from 0 to 7, and the edges are: (0->3) (0->4) (0->7) (0->5) (0->6) (1->2) (1->4) (1->6) (2->7) (2->6) (2->4) (2->3) (3->6) (3->4) (3->7) (4->5) (4->6) (5->6). The nodes of subgraph g are numbered from 0 to 3, and the edges are: (1->3). How many times does subgraph g occur in graph G?
+A: In graph G, with nodes numbered from 0 to 7 and various directed edges, we are tasked with identifying how many times subgraph g, defined by the edge (1->3), occurs. 
+On closer examination of G’s edges, we find two distinct paths that replicate the structure of subgraph g. 
+The first path is through nodes 1, 4, and 3, following the edges (1->4) and (4->3), effectively matching the pattern of g. 
+The second path follows a similar structure, going from node 1 to node 6 and then to node 3, via edges (1->6) and (6->3). 
+These paths mirror the directed connection of subgraph g. 
+Therefore, the count of subgraph g's occurrence in graph G is 2. ### 2.
