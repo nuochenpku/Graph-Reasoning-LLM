@@ -7,12 +7,16 @@ connectivity_train: &connectivity_train
   weight: [False, False, False, False, False]
   directed: [False, False, False, False, False]
   samples_needed: [1600, 500, 300, 300, 300]
-  prompt: "Determine if there is a path between two nodes in an undirected graph. 
+  prompt: "Determine whether two nodes are connected in an undirected graph. 
   In an undirected graph, (i,j) means that node i and node j are connected with an undirected edge.
-  The nodes are numbered from {} to {}, and the edges are: {}.  
-  \nQ: Is there a path between node {} and node {}? Output Yes or No. Begin with '###' to give your final conclusion. "
+  Given a graph and a pair of nodes, you need to output Yes or No, indicating whether the node i and node j are connected. 
+  Q: The nodes are numbered from {} to {}, and the edges are: {}. Is there a path between node {} and node {}?"
   answer: "### {}"
   store_path: "../datasets/train_set/connectivity_train.json"
+  GPT_prompt: "Determine whether two nodes are connected in an undirected graph. 
+  In an undirected graph, (i,j) means that node i and node j are connected with an undirected edge.
+  Given a graph and a question containing a pair of nodes, you need to output Yes or No, indicating whether the node i and node j are connected. Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### Yes' or '### No'. Let's think step by step.
+  I will give you some demonstrations for your better understanding. {} Q: The nodes are numbered from {} to {}, and the edges are: {}. Is there a path between node {} and node {}?"
 
 cycle_train: &cycle_train
   min_nodes: [2, 20, 40, 60, 80]
@@ -25,10 +29,14 @@ cycle_train: &cycle_train
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Determine whether or not there is a cycle in an undirected graph. 
   In an undirected graph, (i,j) means that node i and node j are connected with an undirected edge. 
-  The nodes are numbered from {} to {}, and the edges are: {}. 
-  \nQ: Is there a cycle in this graph? Output Yes or No. Begin with '###' to give your final conclusion. "
+  Given a graph, you need to output Yes or No, indicating whether there is a cycle in the graph.
+  Q: The nodes are numbered from {} to {}, and the edges are: {}. Is there a cycle in this graph?" 
   answer: "### {}"
   store_path: "../datasets/train_set/cycle_train.json"
+  GPT_prompt: " In an undirected graph, (i,j) means that there is an undirected edge between node i and node j. Given a graph, you need to determine if a cycle exists. 
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### Yes' or '### No'. Let's think step by step. 
+  I will provide some examples for your better understanding.
+  {}  Q: The nodes are numbered from {} to {}, and the edges are: {}. Does the graph contain a cycle?"
 
 shortest_train: &shortest_train
   min_nodes: [2, 20, 40, 60, 80]
@@ -41,10 +49,16 @@ shortest_train: &shortest_train
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Find the shortest path between two nodes in an undirected graph.
   In an undirected graph, (i,j,k) means that node i and node j are connected with an undirected edge with weight k. 
-  The nodes are numbered from {} to {}, and the edges are: {}. 
-  \nQ: Give the shortest path from node {} to node {}. Output the total weight of the path. Begin with '###' to give your final conclusion. "
+  Given a graph and a pair of nodes, you need to output the shortest path between the two nodes.
+  Q: The nodes are numbered from {} to {}, and the edges are: {}. Give the weight of the shortest path from node {} to node {}."
   answer: "### {}"
   store_path: "../datasets/train_set/shortest_train.json"
+  GPT_prompt: "Find the shortest path between two nodes in an undirected graph.
+  In an undirected graph, (i,j,k) means that node i and node j are connected with an undirected edge with weight k.
+  Given a graph and a pair of nodes, you need to output the shortest path between the two nodes.
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### 1' or '### 2'. Let's think step by step.
+  I will provide some examples for your better understanding.
+  {} Q: The nodes are numbered from {} to {}, and the edges are: {}. Give the weight of the shortest path from node {} to node {}. Output the total weight of the path. Begin with '###' to give your final conclusion."
 
 bipartite_train: &bipartite_train
   min_nodes: [2, 20, 40, 60, 80]
@@ -56,11 +70,17 @@ bipartite_train: &bipartite_train
   directed: [True, True, True, True, True]
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Determine whether or not a graph is bipartite. 
-  In a directed graph, (i->j) means that node i and node j are connected with an directed edge from node i to node j. 
-  The nodes are numbered from {} to {}, and the edges are: {}. 
-  \nQ: Is this graph bipartite? Output Yes or No. Begin with '###' to give your final conclusion. "
+  In a directed graph, (i->j) means that node i and node j are connected with an directed edge from node i to node j.
+  Given a graph, you need to output Yes or No, indicating whether the graph is bipartite. 
+  Q: The nodes are numbered from {} to {}, and the edges are: {}. Is this graph bipartite?"
   answer: "### {}"
   store_path: "../datasets/train_set/bipartite_train.json"
+  GPT_prompt: "Determine whether or not a graph is bipartite.
+  In a directed graph, (i->j) means that node i and node j are connected with an directed edge from node i to node j.
+  Given a graph, you need to output Yes or No, indicating whether the graph is bipartite.
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### Yes' or '### No'. Let's think step by step.
+  I will provide some examples for your better understanding.
+  {} Q: The nodes are numbered from {} to {}, and the edges are: {}. Is this graph bipartite?"
 
 diameter_train: &diameter_train
   min_nodes: [2, 10, 40, 60, 80]
@@ -73,10 +93,16 @@ diameter_train: &diameter_train
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Find the diameter of an undirected graph. 
   In an undirected graph, (i,j,k) means that node i and node j are connected with an undirected edge with weight k. 
-  The nodes are numbered from {} to {}, and the edges are: {}. 
-  \nQ: What is the diameter of this graph? Output the diameter. Begin with '###' to give your final conclusion. "
+  Given a graph, you need to output the diameter of the graph.
+  Q: The nodes are numbered from {} to {}, and the edges are: {}. What is the diameter of this graph?"
   answer: "### {}"
   store_path: "../datasets/train_set/diameter_train.json"
+  GPT_prompt: "Find the diameter of an undirected graph.
+  In an undirected graph, (i,j,k) means that node i and node j are connected with an undirected edge with weight k.
+  Given a graph, you need to output the diameter of the graph.
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### 1' or '### 2'. Let's think step by step.
+  I will provide some examples for your better understanding.
+  {} Q: The nodes are numbered from {} to {}, and the edges are: {}. What is the diameter of this graph? Output the diameter. Begin with '###' to give your final conclusion."
 
 flow_train: &flow_train
   min_nodes: [2, 20, 40, 60, 80]
@@ -89,10 +115,16 @@ flow_train: &flow_train
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Find the maximum flow between two nodes in a directed graph. 
   In a directed graph, (i->j,k) means that node i and node j are connected with an directed edge from node i to node j with weight k. 
-  The nodes are numbered from {} to {}, and the edges are: {}. 
-  \nQ: What is the maximum flow from node {} to node {}? Output the maximum flow. Begin with '###' to give your final conclusion. "
+  Given a graph and a pair of nodes, you need to output the maximum flow between the two nodes.
+  Q: The nodes are numbered from {} to {}, and the edges are: {}. What is the maximum flow from node {} to node {}?"
   answer: "### {}"
   store_path: "../datasets/train_set/flow_train.json"
+  GPT_prompt: "Find the maximum flow between two nodes in a directed graph.
+  In a directed graph, (i->j,k) means that node i and node j are connected with an directed edge from node i to node j with weight k.
+  Given a graph and a pair of nodes, you need to output the maximum flow between the two nodes.
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### 1' or '### 2'. Let's think step by step.
+  I will provide some examples for your better understanding.
+  {} Q: The nodes are numbered from {} to {}, and the edges are: {}. What is the maximum flow from node {} to node {}? Output the maximum flow. Begin with '###' to give your final conclusion."
 
 hamilton_train: &hamilton_train
   min_nodes: [2, 10, 20, 30, 40]
@@ -105,10 +137,16 @@ hamilton_train: &hamilton_train
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Determine whether or not there is a Hamiltonian path in an undirected graph. 
   In an undirected graph, (i,j) means that node i and node j are connected with an undirected edge. 
-  The nodes are numbered from {} to {}, and the edges are: {}. 
-  \nQ: Is there a Hamiltonian path in this graph? Output Yes or No. Begin with '###' to give your final conclusion. "
+  Given a graph, you need to output Yes or No, indicating whether there is a Hamiltonian path in the graph.
+  Q: The nodes are numbered from {} to {}, and the edges are: {}. Is there a Hamiltonian path in this graph?"
   answer: "### {}"
   store_path: "../datasets/train_set/hamilton_train.json"
+  GPT_prompt: "Determine whether or not there is a Hamiltonian path in an undirected graph.
+  In an undirected graph, (i,j) means that node i and node j are connected with an undirected edge.
+  Given a graph, you need to output Yes or No, indicating whether there is a Hamiltonian path in the graph.
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### Yes' or '### No'. Let's think step by step.
+  I will provide some examples for your better understanding.
+  {} Q: The nodes are numbered from {} to {}, and the edges are: {}. Is there a Hamiltonian path in this graph? Output Yes or No. Begin with '###' to give your final conclusion."
 
 substructure_train: &substructure_train
   min_nodes: [2, 10, 15, 20, 25]
@@ -121,11 +159,18 @@ substructure_train: &substructure_train
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Determine the number of occurrences of a directed subgraph g within a directed graph G. 
   In a directed graph, (i->j) means that node i and node j are connected with a directed edge from node i to node j. 
-  The nodes of graph G are numbered from {} to {}, and the edges are: {}. 
+  Given a graph G and a subgraph g, you need to output the number of occurrences of g in G.
+  Q: The nodes of graph G are numbered from {} to {}, and the edges are: {}. 
   The nodes of subgraph g are numbered from {} to {}, and the edges are: {}. 
-  \nQ: How many times does subgraph g occur in graph G? Output the number of occurrences.  Begin with '###' to give your final conclusion. "
+  How many times does subgraph g occur in graph G?"
   answer: "### {}"
   store_path: "../datasets/train_set/substructure_train.json"
+  GPT_prompt: "Determine the number of occurrences of a directed subgraph g within a directed graph G.
+  In a directed graph, (i->j) means that node i and node j are connected with a directed edge from node i to node j.
+  Given a graph G and a subgraph g, you need to output the number of occurrences of g in G.
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### 1' or '### 2'. Let's think step by step.
+  I will provide some examples for your better understanding.
+  {} Q: The nodes of graph G are numbered from {} to {}, and the edges are: {}. The nodes of subgraph g are numbered from {} to {}, and the edges are: {}. How many times does subgraph g occur in graph G? Output the number of occurrences. Begin with '###' to give your final conclusion."
 
 triplet_train: &triplet_train
   min_nodes: [2, 20, 40, 60, 80]
@@ -137,11 +182,18 @@ triplet_train: &triplet_train
   directed: [False, False, False, False, False]
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Find the maximum sum of the weights of three nodes that are connected. 
-  In an undirected graph, [i, k] means that node i has the weight k. (i,j) means that node i and node j are connected with an undirected edge. 
-  The nodes are numbered from {} to {}, weights of nodes are: {}, and the edges are: {}. 
-  \nQ: What is the maximum sum of the weights of three nodes? Output the total weight of the triplet. Begin with '###' to give your final conclusion. "
+  In an undirected graph, [i, k] means that node i has the weight k. (i,j) means that node i and node j are connected with an undirected edge.
+  Given a graph, you need to output the maximum sum of the weights of three nodes that are connected. 
+  Q: The nodes are numbered from {} to {}, weights of nodes are: {}, and the edges are: {}. What is the maximum sum of the weights of three nodes?"
   answer: "### {}"
   store_path: "../datasets/train_set/triplet_train.json"
+  GPT_prompt: "Find the maximum sum of the weights of three nodes that are connected.
+  In an undirected graph, [i, k] means that node i has the weight k. (i,j) means that node i and node j are connected with an undirected edge.
+  Given a graph, you need to output the maximum sum of the weights of three nodes that are connected.
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### 1' or '### 2'. Let's think step by step.
+  I will provide some examples for your better understanding.
+  {} Q: The nodes are numbered from {} to {}, weights of nodes are: {}, and the edges are: {}. What is the maximum sum of the weights of three nodes? Output the total weight of the triplet. Begin with '###' to give your final conclusion."
+  
 
 topology_train: &topology_train
   min_nodes: [2, 5, 10, 15, 20]
@@ -154,7 +206,13 @@ topology_train: &topology_train
   samples_needed: [1600, 500, 300, 300, 300]
   prompt: "Find one of the topology sorting paths of the given graph.
   In a directed graph, (i->j) means that node i and node j are connected with a directed edge from node i to node j. 
-  The nodes are numbered from {} to {}, and the edges are: {}. 
-  \nQ: Give one topology sorting path of this graph. Output only the path, with the format of list of indexes. Begin with '###' to give your final conclusion. "
+  Given a graph, you need to output one of the topology sorting paths of the graph.
+  Q: The nodes are numbered from {} to {}, and the edges are: {}. Give one topology sorting path of this graph."
   answer: "### {}"
   store_path: "../datasets/train_set/topology_train.json"
+  GPT_prompt: "Find one of the topology sorting paths of the given graph.
+  In a directed graph, (i->j) means that node i and node j are connected with a directed edge from node i to node j.
+  Given a graph, you need to output one of the topology sorting paths of the graph.
+  Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### [1, 2, 3, 4]' or '### [4, 3, 2, 1]'. Let's think step by step.
+  I will provide some examples for your better understanding.
+  {} Q: The nodes are numbered from {} to {}, and the edges are: {}. Give one topology sorting path of this graph. Output only the path, with the format of list of indexes. Begin with '###' to give your final conclusion."
