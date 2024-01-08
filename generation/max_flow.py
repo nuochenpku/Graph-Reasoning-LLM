@@ -26,6 +26,12 @@ def flow_datasets_generation(config):
             random_nodes = random.sample(nodes, 2)
             if not if_connected(random_graph, random_nodes[0], random_nodes[1]):
                 continue
+            # edge number check
+            if random_graph.number_of_edges() == 1:
+                continue
+            # edge check
+            if random_graph.has_edge(random_nodes[0], random_nodes[1]):
+                continue
             max_flow = find_maximum_flow(random_graph, random_nodes[0], random_nodes[1])
             node_nums, edges_flat = graph_details_with_weight(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat, random_nodes[0], random_nodes[1])
