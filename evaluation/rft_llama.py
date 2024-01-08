@@ -121,7 +121,7 @@ def main(
     # test_files =  get_all_tests(args.data_path)
     
     # tasks = ['connectivity', 'cycle','flow', 'GNN', 'hamilton', 'matching','shortest_path', 'topology']
-    tasks = ['connectivity', 'cycle','flow', 'GNN', 'hamilton', 'matching','shortest_path', 'topology']
+    tasks = ['connectivity', 'cycle']
     # if args.lang_only == '':
     #     langs = test_files
        
@@ -142,8 +142,8 @@ def main(
             # except:
             #     continue
             
-            with open(f'/cpfs/user/chennuo/CN/NLGraph/NLGraph/{lang}/train.json') as f:
-                datas = json.load(f)
+            with open(f'/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/train_set/{lang}_train.json') as f:
+                datas = f.readlines()
                 
             gen_datas_jsonl = Path(save_dir) / f"{seed}_gen_{lang}_datas.jsonl"
             start_index = (
@@ -151,9 +151,9 @@ def main(
             )
             print(f"start_index: {start_index}")
             
-            gsm8k_datas = []
-            for key, value in datas.items():
-                gsm8k_datas.append(value)
+            gsm8k_datas = [json.loads(item) for item in datas]
+            # for key, value in datas.items():
+            #     gsm8k_datas.append(value)
             
             
             for i in tqdm(range(start_index, len(gsm8k_datas), batch_size)):
@@ -168,10 +168,10 @@ def main(
                         json.dump(
                             dict(
                                 index=i + j,
-                                fact_data=gsm8k_data,
+                                source_data=gsm8k_data,
                                 input_str=input_str,
                                 output_str=output_str,
-                                lang=lang
+                                task=lang
                             ),
                             f,
                         )
@@ -186,7 +186,7 @@ def main(
             for gen in gen_datas:
                 result = dict(
                     **gen,
-                    extract_true=gen["fact_data"]["answer"],
+                    extract_true=gen["source_data"]["answer"],
                     extract_pred=gen["output_str"].lstrip(),
                     is_correct=None,
                 )
@@ -234,10 +234,12 @@ def gsm8k_batch_gen(
         f"Write a response that appropriately completes the request. Please answer in.\n\n"
         "### Instruction:\n{query}\n\n### Response:"
     )
-    
-    curs_gsm8k_questions = [v['question'] for v in cur_gsm8k_batch]
+    try:
+        curs_gsm8k_questions = [v['question'] for v in cur_gsm8k_batch]
+    except:
+        curs_gsm8k_questions = [v['input_prompt'] for v in cur_gsm8k_batch]
     # prompt_no_input = PROMPT_DICTS['normal_prompt']
-    input_str_list = [prompt_no_input.format(query=q.split('\nA:')[0].replace('\nQ:','\n###Question:')) for q in curs_gsm8k_questions]
+    input_str_list = [prompt_no_input.format(query=q.replace('Q:','\n###Question:')) for q in curs_gsm8k_questions]
     output_str_list = batch_llm(input_str_list)
     return input_str_list, output_str_list
 
