@@ -173,23 +173,23 @@ substructure_train: &substructure_train
   {} Q: The nodes of graph G are numbered from {} to {}, and the edges are: {}. The nodes of subgraph g are numbered from {} to {}, and the edges are: {}. How many times does subgraph g occur in graph G? Output the number of occurrences. Begin with '###' to give your final conclusion."
 
 triplet_train: &triplet_train
-  min_nodes: [2, 20, 40, 60, 80]
-  max_nodes: [20, 40, 60, 80, 100]
+  min_nodes: [2, 5, 8, 11, 13]
+  max_nodes: [4, 7, 10, 12, 14]
   max_edges: [500, 500, 500, 500, 500]
   min_ratio: [0.4, 0.1, 0.08, 0.06, 0.04]
   max_ratio: [0.6, 0.2, 0.12, 0.08, 0.07]
   weight: [True, True, True, True, True]
   directed: [False, False, False, False, False]
   samples_needed: [1600, 500, 300, 300, 300]
-  prompt: "Find the maximum sum of the weights of three nodes that are connected. 
+  prompt: "Find the maximum sum of the weights of three interconnected nodes. 
   In an undirected graph, [i, k] means that node i has the weight k. (i,j) means that node i and node j are connected with an undirected edge.
-  Given a graph, you need to output the maximum sum of the weights of three nodes that are connected. 
+  Given a graph, you need to output the maximum sum of the weights of three interconnected nodes. 
   Q: The nodes are numbered from {} to {}, weights of nodes are: {}, and the edges are: {}. What is the maximum sum of the weights of three nodes?"
   answer: "### {}"
   store_path: "../datasets/train_set/triplet_train.json"
-  GPT_prompt: "Find the maximum sum of the weights of three nodes that are connected.
+  GPT_prompt: "Find the maximum sum of the weights of three interconnected nodes.
   In an undirected graph, [i, k] means that node i has the weight k. (i,j) means that node i and node j are connected with an undirected edge.
-  Given a graph, you need to output the maximum sum of the weights of three nodes that are connected.
+  Given a graph, you need to output the maximum sum of the weights of three interconnected nodes.
   Your output first contains your reasoning process and then begin with '###' to give your final answer, i.e., '### 1' or '### 2'. Let's think step by step.
   I will provide some examples for your better understanding.
   {} Q: The nodes are numbered from {} to {}, weights of nodes are: {}, and the edges are: {}. What is the maximum sum of the weights of three nodes? Output the total weight of the triplet. Begin with '###' to give your final conclusion."

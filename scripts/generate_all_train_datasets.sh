@@ -1,5 +1,5 @@
-tasks=("connectivity_train" "cycle_train" "shortest_train" "bipartite_train" "diameter_train" "flow_train" "hamilton_train" "triplet_train" "topology_train" "substructure_train")
-
+# tasks=("connectivity_train" "cycle_train" "shortest_train" "bipartite_train" "diameter_train" "flow_train" "hamilton_train" "triplet_train" "topology_train" "substructure_train")
+tasks=("triplet_train")
 for task in "${tasks[@]}"
 do
 python ../generation/main.py --task $task

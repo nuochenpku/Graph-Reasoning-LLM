@@ -114,7 +114,7 @@ def main(
 
     pure_model = model_path.split('/')[-1]
     if save_dir is None:
-        save_dir = f"/cpfs/user/chennuo/CN/NLGraph/Results/{pure_model}/{model.dtype}_bs{batch_size}/xrft"
+        save_dir = f"/cpfs/user/chennuo/CN/Graph_RFT_Data/Results/{pure_model}/{model.dtype}_bs{batch_size}/xrft"
     Path(save_dir).mkdir(parents=True, exist_ok=True)
     
     
