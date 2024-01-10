@@ -4,6 +4,7 @@ Given a graph G and a subgraph G', you need to output Yes or No, indicating whet
 
 Below are examples:
 
+
 Q: The nodes of graph G are numbered from 0 to 7, and the edges are: (0->4) (0->5) (0->2) (0->3) (0->1) (0->7) (1->6) (1->5) (1->4) (1->7) (1->3) (2->7) (2->5) (2->6) (2->3) (3->4) (3->6) (3->7) (3->5) (4->7) (4->6) (4->5) (5->6) (5->7) (6->7). The nodes of subgraph G' are numbered from a to e, and the edges are: (a->b) (b->c) (b->e) (b->d) (c->e) (c->d). Is subgraph G' present within graph G as a direct substructure?
 A: To determine if subgraph G' is present within graph G, let's briefly analyze both graphs:
 Subgraph G' has the following edges: (a->b), (b->c), (b->e), (b->d), (c->e), (c->d). The key node here is 'b', which has outgoing edges to three different nodes: 'c', 'e', and 'd'. Additionally, 'c' has outgoing edges to both 'e' and 'd'.

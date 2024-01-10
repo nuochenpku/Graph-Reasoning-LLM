@@ -4,6 +4,7 @@ Given a graph, you need to output one of the topology sorting paths of the graph
 
 Below are several examples:
 
+
 Q: The nodes are numbered from 0 to 4, and the edges are: (0->3) (0->4) (0->1) (0->2) (1->4) (1->3) (2->4) (2->3) (3->4). Give one topology sorting path of this graph.
 A: To find a topological sorting path for the directed graph with nodes 0 to 4 and edges like (0->3), (0->4), and so on, we can apply a method where we choose nodes with no incoming edges, one by one. 
 Initially, node 0 is selected as it doesn't have any incoming edges. 
@@ -30,6 +31,7 @@ Let's begin with node 0, followed by node 1, as neither has dependencies on the 
 After placing node 0 and node 1, node 2 is the next logical choice. Node 2 only has an incoming edge from node 0, which has already been placed in the sequence.
 Finally, node 3, which has incoming edges from all the previously placed nodes (0, 1, and 2), can be placed last in the sequence.
 Thus, a valid topological sorting path for this graph is: [0, 1, 2, 3]. ### [0, 1, 2, 3].
+
 
 Q: The nodes are numbered from 0 to 4, and the edges are: (0->4) (0->2) (0->3) (0->1) (1->4) (1->3) (1->2) (2->3). Give one topology sorting path of this graph.
 A: We apply a method where nodes are selected one by one, prioritizing those with no incoming edges from the remaining unselected nodes. 

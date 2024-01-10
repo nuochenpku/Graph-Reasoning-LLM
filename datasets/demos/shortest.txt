@@ -2,7 +2,8 @@ Find the shortest path between two nodes in an undirected graph.
 In an undirected graph, (i,j,k) means that node i and node j are connected with an undirected edge with weight k.
 Given a graph and a pair of nodes, you need to output the shortest path between the two nodes.
 
-Blow are several examples:
+Below are several examples:
+
 
 Q: The nodes are numbered from 0 to 4, and the edges are: (0,4,1) (0,1,3) (1,2,6) (3,4,3). Give the weight of the shortest path from node 3 to node 4.
 A: When looking at the graph with nodes 0 to 4 and the specified edges, our focus is on finding the shortest path from node 3 to node 4. Here, we have a direct edge (3,4) with a weight of <<3>>.

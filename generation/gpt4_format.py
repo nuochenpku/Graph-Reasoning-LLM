@@ -80,29 +80,36 @@ A: Let's think step by step. The amount of action figures that Jack had is 9+7=1
 
 results = dict()
 # langs = ['English','Bengali', 'Chinese', 'German', 'Spanish', 'French', 'Japanese', 'Russian', 'Swahili', 'Thai']
-tasks = ['connectivity', 'cycle','flow', 'GNN', 'hamilton', 'matching','shortest_path', 'topology']
-with open('gpt4_nlg_sample3.json',  'w', encoding='utf-8') as writer:
+tasks = ['connectivity', 'cycle','flow', 'bipartite', 'hamilton', 'triplet', 'shortest', 'topology', 'substructure',]
+with open('/cpfs/user/chennuo/CN/Agent_Aug/gpt4_gsm8knlg_sample3.json',  'a', encoding='utf-8') as writer:
+    rights = 0
     for task in tasks:
-        rights = 0
+        
         # data_path = f"/cpfs/user/chennuo/CN/gsm8k-ScRel/data/mgsm/mgsm_{lang}.json"
         # acc, folder = main(args, datas[:16])
         
         
-        with open(f"/cpfs/user/chennuo/CN/NLGraph/NLGraph/{task}/prompt/" + "CoT-prompt.txt", "r") as f:
+        with open(f"/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/demos/{task}.txt", "r") as f:
             exemplar = f.read()
 
-
-        for key, data in tqdm(datas.items()):
+        with open(f'/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/train_set/{task}_train.json') as f:
+            datas = f.readlines()
+        
+        
+        for data in tqdm(datas):
+            
+            data = json.loads(data)
             response = data['answer']
             
-            query = data['question']
+            query = data['input_prompt'].replace(' Q:',' \nQ:')
 
-            inputs = exemplar + '\n\n\n' + query + " \nBegin with '###' to give your final conclusion."
+            inputs = exemplar + '\n\n' + query + " \nBegin with '###' to give your final conclusion."
                     
             
             new_data = {}
+            new_data['id'] = rights
             new_data['prompt'] = inputs
-            new_data['max_tokens'] = 1050
+            new_data['max_tokens'] = 1500
             new_data['temperature'] = 0.7
             new_data['n'] = int(1)
             new_data['top_p']= int(1)
@@ -112,8 +119,15 @@ with open('gpt4_nlg_sample3.json',  'w', encoding='utf-8') as writer:
             new_data['response'] = response
             new_data['query'] = query
             new_data['task'] = task
-            new_data['id'] = key
             
-            writer.write(json.dumps(new_data, ensure_ascii=False) + '\n')
-            writer.write(json.dumps(new_data, ensure_ascii=False) + '\n')
-            writer.write(json.dumps(new_data, ensure_ascii=False) + '\n')
+            rights += 1
+            
+            # print(inputs)
+            # break
+            
+            if task in ['connectivity', 'cycle']:
+                writer.write(json.dumps(new_data, ensure_ascii=False) + '\n')
+            else:
+                    
+                writer.write(json.dumps(new_data, ensure_ascii=False) + '\n')
+                writer.write(json.dumps(new_data, ensure_ascii=False) + '\n')

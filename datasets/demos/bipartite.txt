@@ -4,6 +4,7 @@ Given a graph, you need to output 'Yes' or 'No' step by step, indicating whether
 
 Blow are examples:
 
+
 Q: The nodes are numbered from 0 to 10, and the edges are: (0->10) (0->8) (0->9) (1->3) (1->6) (1->10) (2->7) (3->5) (3->10) (4->10) (4->9) (4->8) (6->10) (6->7) (6->9) (7->8). Is this graph bipartite?
 A: In examining whether the given graph is bipartite, we initially attempt to categorize its nodes into two distinct sets, A and B, ensuring that no two adjacent nodes fall within the same set. 
 The graph's edges, such as (0->10), (1->3), and (4->9), among others, establish connections between various nodes. 

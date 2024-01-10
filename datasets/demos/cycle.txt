@@ -1,8 +1,9 @@
 Determine whether or not there is a cycle in an undirected graph. Begin with '###' to give your final conclusion.
 In an undirected graph, (i,j) means that node i and node j are connected with an undirected edge.
-Given a graph, you need to output Yes or No, indicating whether there is a cycle in the graph.
+Given a graph, you need to output Yes or No step by step, indicating whether there is a cycle in the graph.
 
 Below are examples:
+
 
 Q: The nodes are numbered from 0 to 5, and the edges are: (3,4) (3,5) (1,0) (2,5) (2,0). Is there a cycle in this graph?
 A: Nodes 3, 4, and 5 are connected to each other, but there's no way to form a cycle with these connections without revisiting an edge.
