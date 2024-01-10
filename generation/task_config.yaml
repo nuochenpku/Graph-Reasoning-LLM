@@ -152,17 +152,24 @@ substructure_train: &substructure_train
   min_nodes: [2, 10, 15, 20, 25]
   max_nodes: [10, 15, 20, 25, 30]
   max_edges: [500, 500, 500, 500, 500]
-  min_ratio: [0.5, 0.5, 0.4, 0.4, 0.3]
-  max_ratio: [0.9, 0.8, 0.7, 0.6, 0.5]
+  min_ratio: [0.2, 0.2, 0.1, 0.1, 0.3]
+  max_ratio: [0.9, 0.3, 0.3, 0.6, 0.5]
   weight: [False, False, False, False, False]
   directed: [True, True, True, True, True]
-  samples_needed: [1600, 500, 300, 300, 300]
-  prompt: "Determine the number of occurrences of a directed subgraph g within a directed graph G. 
-  In a directed graph, (i->j) means that node i and node j are connected with a directed edge from node i to node j. 
-  Given a graph G and a subgraph g, you need to output the number of occurrences of g in G.
-  Q: The nodes of graph G are numbered from {} to {}, and the edges are: {}. 
-  The nodes of subgraph g are numbered from {} to {}, and the edges are: {}. 
-  How many times does subgraph g occur in graph G?"
+  samples_needed: [1, 150, 150, 150, 150]
+  prompt: "Determine if a smaller graph is present as an exact match within a larger graph. 
+  In a directed graph, (i->j) means that node i and node j are connected with a directed edge from node i to node j.
+  Given a graph G and a subgraph G', you need to output Yes or No, indicating whether subgraph G' is present within the directed graph G.
+  Q: The nodes of graph G are numbered from {} to {}, and the edges are: {}.
+  The nodes of subgraph G' are numbered from {} to {}, and the edges are: {}.
+  Is subgraph G' present within graph G as a direct substructure?"
+  # prompt: "Determine if a directed subgraph g exists within a directed graph G as an exact match.
+  # In a directed graph, (i->j) means that node i and node j are connected with a directed edge from node i to node j.
+  # Given a graph G and a subgraph g, you need to output Yes or No, indicating whether subgraph g is present within graph G as a complete structure.
+  # Q: The nodes of graph G are numbered from {} to {}, and the edges are: {}.
+  # The nodes of subgraph g are numbered from {} to {}, and the edges are: {}.
+  # For a 'Yes' answer, all edges of subgraph g must be found as a connected component in graph G.
+  # Does subgraph g exist within graph G as a direct substructure without any additional or missing edges?"
   answer: "### {}"
   store_path: "../datasets/train_set/substructure_train.json"
   GPT_prompt: "Determine the number of occurrences of a directed subgraph g within a directed graph G.

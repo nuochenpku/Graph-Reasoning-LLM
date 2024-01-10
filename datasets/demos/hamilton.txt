@@ -1,6 +1,6 @@
 Determine whether or not there is a Hamiltonian path in an undirected graph.
 In an undirected graph, (i,j) means that node i and node j are connected with an undirected edge.
-Given a graph, you need to output 'Yes' or 'No' step by step, indicating whether there is a Hamiltonian path in the graph. 
+Given a graph, you need to output 'Yes' or 'No', indicating whether there is a Hamiltonian path in the graph. 
 
 Blow are several examples:
 
@@ -42,6 +42,3 @@ A: In analyzing the graph with nodes from 0 to 5 and the given edges, we observe
 Since a Hamiltonian path requires visiting each node exactly once, the presence of an isolated node like node 0 makes it impossible to form such a path.
 The other nodes (1 to 5) are interconnected, suggesting that a Hamiltonian path could exist if not for the isolated node 0.
 Therefore, the conclusion is that there is no Hamiltonian path in this graph due to the disconnected nature of node 0. ### No.
-
-
-
