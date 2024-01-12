@@ -232,7 +232,7 @@ def gsm8k_batch_gen(
     lang = lang_ if lang_ != 'En_gsm8k' else 'English'
     prompt_no_input = (
       "Below is an instruction that describes a task. "
-        f"Write a response that appropriately completes the request. Please answer in.\n\n"
+        f"Write a response that appropriately completes the request.\n\n"
         "### Instruction:\n{query}\n\n### Response:"
     )
     try:
@@ -240,7 +240,7 @@ def gsm8k_batch_gen(
     except:
         curs_gsm8k_questions = [v['input_prompt'] for v in cur_gsm8k_batch]
     # prompt_no_input = PROMPT_DICTS['normal_prompt']
-    input_str_list = [prompt_no_input.format(query=q.replace('Q:','\n###Question:')) for q in curs_gsm8k_questions]
+    input_str_list = [prompt_no_input.format(query=q) for q in curs_gsm8k_questions]
     output_str_list = batch_llm(input_str_list)
     return input_str_list, output_str_list
 

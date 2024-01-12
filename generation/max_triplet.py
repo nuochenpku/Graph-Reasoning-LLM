@@ -2,6 +2,7 @@ import itertools
 from utils import write_to_file, getTokenizer, graph_details_with_nodes_weight
 from gen_random_graph import create_random_graph_node_weights
 from cycle_ import if_cyclic
+from utils import getMaxEdges
 
 def maximum_triplet_sum(G):
     max_triplet_sum = 0
@@ -14,6 +15,7 @@ def maximum_triplet_sum(G):
 
 def triplet_datasets_generation(config):
     tokenizer = getTokenizer()
+    index = 0
     for i in range(len(config["min_nodes"])):
         min_nodes = config["min_nodes"][i]
         max_nodes = config["max_nodes"][i]
@@ -22,8 +24,19 @@ def triplet_datasets_generation(config):
         max_ratio = config["max_ratio"][i]
         weight = config["weight"][i]
         directed = config["directed"][i]
+        edges_number = [int(getMaxEdges(min_nodes) * min_ratio), int(getMaxEdges(max_nodes) * max_ratio)]
+        nodes_number = [min_nodes, max_nodes]
         valid = 0
         dup = set()
+        # test duplicate check
+        if "test" in config["store_path"]:
+            # read from train
+            with open(config["store_path"].replace("test", "train"), "r") as f:
+                for line in f:
+                    if line.strip() == "":
+                        continue
+                    sample = eval(line.strip())
+                    dup.add(sample["input_prompt"])
         while 1:
             random_graph = create_random_graph_node_weights(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, directed)
             max_triplet = maximum_triplet_sum(random_graph)
@@ -41,8 +54,12 @@ def triplet_datasets_generation(config):
             if max_triplet == 0:
                 continue
             sample = {}
+            sample["index"] = index
+            index += 1
             sample["input_prompt"] = input_prompt
             sample["answer"] = ans
+            sample["node_range"] = nodes_number
+            sample["edge_range"] = edges_number
             write_to_file(config["store_path"], sample)
             valid += 1
             if valid == config["samples_needed"][i]:

@@ -63,11 +63,11 @@ G.add_edge(1, 2)
 G.add_edge(2, 3)
 
 g = nx.DiGraph()
-g.add_edge(0, 3)
-g.add_edge(0, 2)
-g.add_edge(1, 3)
+g.add_edge("a", "b")
+# g.add_edge("a", "c")
+# g.add_edge("c", "d")
 
-matcher = DiGraphMatcher(G, g)
+matcher = DiGraphMatcher(G, g, node_match=None, edge_match=None)
 
 is_isomorphic = matcher.subgraph_is_isomorphic()
 

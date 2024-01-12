@@ -4,6 +4,7 @@ import json
 from transformers import LlamaTokenizer
 import os
 import networkx as nx
+from itertools import combinations
 
 def load_yaml(dir):
     with open(dir, "r") as stream:
@@ -49,3 +50,9 @@ def graph_details_with_nodes_weight(G):
 
 def getTokenizer():
     return LlamaTokenizer.from_pretrained("/data/Llama-2-7b-hf")
+
+def getMaxEdges(num_nodes):
+    # add numbers of nodes and edges
+    all_possible_edges = list(combinations(range(int(num_nodes)), 2))
+    max_edges = len(all_possible_edges)
+    return max_edges
