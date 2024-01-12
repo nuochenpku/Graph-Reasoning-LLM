@@ -114,14 +114,15 @@ def main(
 
     pure_model = model_path.split('/')[-1]
     if save_dir is None:
-        save_dir = f"/cpfs/user/chennuo/CN/Graph_RFT_Data/Results/{pure_model}/{model.dtype}_bs{batch_size}/xrft"
+        save_dir = f"/cpfs/user/chennuo/CN/Graph_RFT_Data/Results/{pure_model}/{model.dtype}/xrft"
     Path(save_dir).mkdir(parents=True, exist_ok=True)
     
     
     # test_files =  get_all_tests(args.data_path)
     
     # tasks = ['connectivity', 'cycle','flow', 'GNN', 'hamilton', 'matching','shortest_path', 'topology']
-    tasks = ['connectivity', 'cycle']
+    # tasks = ['connectivity', 'cycle']
+    tasks = ['cycle', 'connectivity', 'hamilton', 'substructure', 'bipartite', 'flow', 'shortest', 'triplet', 'topology']
     # if args.lang_only == '':
     #     langs = test_files
        
@@ -131,7 +132,7 @@ def main(
     sources = []
     targets = []
     results = {}
-    for seed in  range(100):
+    for seed in  range(20):
         print(f'===========we are testing in {seed}====================')
         for lang in tasks:
             print(f'===========we are testing in {lang}====================')
@@ -178,49 +179,49 @@ def main(
                         f.write("\n")
 
         # calculate acc
-            with open(gen_datas_jsonl) as f:
-                gen_datas = [json.loads(line) for line in f]
+        #     with open(gen_datas_jsonl) as f:
+        #         gen_datas = [json.loads(line) for line in f]
 
-            correct_results = []
-            wrong_results = []
-            for gen in gen_datas:
-                result = dict(
-                    **gen,
-                    extract_true=gen["source_data"]["answer"],
-                    extract_pred=gen["output_str"].lstrip(),
-                    is_correct=None,
-                )
+        #     correct_results = []
+        #     wrong_results = []
+        #     for gen in gen_datas:
+        #         result = dict(
+        #             **gen,
+        #             extract_true=gen["source_data"]["answer"],
+        #             extract_pred=gen["output_str"].lstrip(),
+        #             is_correct=None,
+        #         )
                 
-                if check(lang, result["extract_true"].lower(), result["extract_pred"].lower()):
+        #         if check(lang, result["extract_true"].lower(), result["extract_pred"].lower()):
                 
-                # if result["extract_pred"].lower() in result["extract_true"].lower() or result["extract_true"].lower() in result["extract_pred"].lower():
-                    result["is_correct"] = True
-                    correct_results.append(result)
-                else:
-                    result["is_correct"] = False
-                    wrong_results.append(result)
+        #         # if result["extract_pred"].lower() in result["extract_true"].lower() or result["extract_true"].lower() in result["extract_pred"].lower():
+        #             result["is_correct"] = True
+        #             correct_results.append(result)
+        #         else:
+        #             result["is_correct"] = False
+        #             wrong_results.append(result)
 
-            print(f'=======done {lang}============')
-            result = f"Accuracy={len(correct_results)}/({len(correct_results)}+{len(wrong_results)})={len(correct_results)/(len(correct_results) + len(wrong_results))}"
-            print(result)
-            with open(Path(save_dir) / f"{lang}_correct.json", "w", encoding='utf-8') as f:
-                json.dump(correct_results, f, ensure_ascii=False, indent=4)
-            with open(Path(save_dir) / f"{lang}_wrong.json", "w", encoding='utf-8') as f:
-                json.dump(wrong_results, f, ensure_ascii=False, indent=4)
-            num_result = float(result.split('=')[-1])
-            if lang != 'En_gsm8k':
-                results[lang] = num_result
-            else:
-                gsm8k = num_result
-        average = sum(results.values()) / len(results)
-        print(average)
-        import csv
-        with open(Path(save_dir) / f"NLG_evaluate_results_bs{batch_size}.csv", 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['Task', 'Accuracy'])
-            for key, value in results.items():
-                writer.writerow([key, value])
-            writer.writerow(['Average', average])
+        #     print(f'=======done {lang}============')
+        #     result = f"Accuracy={len(correct_results)}/({len(correct_results)}+{len(wrong_results)})={len(correct_results)/(len(correct_results) + len(wrong_results))}"
+        #     print(result)
+        #     with open(Path(save_dir) / f"{lang}_correct.json", "w", encoding='utf-8') as f:
+        #         json.dump(correct_results, f, ensure_ascii=False, indent=4)
+        #     with open(Path(save_dir) / f"{lang}_wrong.json", "w", encoding='utf-8') as f:
+        #         json.dump(wrong_results, f, ensure_ascii=False, indent=4)
+        #     num_result = float(result.split('=')[-1])
+        #     if lang != 'En_gsm8k':
+        #         results[lang] = num_result
+        #     else:
+        #         gsm8k = num_result
+        # average = sum(results.values()) / len(results)
+        # print(average)
+        # import csv
+        # with open(Path(save_dir) / f"NLG_evaluate_results_bs{batch_size}.csv", 'w', newline='') as file:
+        #     writer = csv.writer(file)
+        #     writer.writerow(['Task', 'Accuracy'])
+        #     for key, value in results.items():
+        #         writer.writerow([key, value])
+        #     writer.writerow(['Average', average])
         # writer.writerow(['GSM8K', gsm8k])
     
 
