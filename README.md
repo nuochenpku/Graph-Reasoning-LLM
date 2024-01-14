@@ -14,6 +14,13 @@ cd scripts
 bash generate_all_train_datasets.sh
 ```
 
+## Generate all test set
+
+```
+cd scripts
+bash generate_all_test_datasets.sh
+```
+
 ## Trl Training
 
 change Llama_path & evaluation file path.

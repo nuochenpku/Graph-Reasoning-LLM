@@ -5,7 +5,7 @@ from typing import Callable
 import random
 import torch
 from tqdm import tqdm
-from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
+from transformers import GenerationConfig, AutoModelForCausalLM, AutoTokenizer
 from typing import Optional, Dict, Sequence, List
 import argparse
 
@@ -23,79 +23,52 @@ def extract_last_num(text: str) -> float:
         return 0.0
     
     
-
-
-
 def check(key, truth, predict):
-    # correct_samples  = {task:[] for task in tasks}
-
-
-    if key in ['cycle', 'connectivity']:
-       
-        if 'yes' in truth.lower() and 'yes' in predict.split('###')[-1].lower():
-            # correct_samples[key].append(v)
-            return True
-        elif 'no' in truth.lower() and 'no' in predict.split('###')[-1].lower():
-            return True
-        return False
     
-    elif key == 'flow':
+    if key in ['cycle', 'connectivity', 'hamilton', 'substructure', 'bipartite']:
+        if '###' in predict:
+            if 'yes' in truth.lower() and 'yes' in predict.split('###')[-1].lower():
+                # correct_samples[key].append(v)
+                return True
+            elif 'no' in truth.lower() and 'no' in predict.split('###')[-1].lower():
+                return True
+            return False
+        else:
+            matches = re.findall(r'(yes|no)', predict, flags=re.IGNORECASE)
+            if matches:
+                last_match = matches[-1].lower()
+                if last_match == 'yes' and 'yes' in truth.lower():
+                    return True
+                elif last_match == 'no' and 'no' in truth.lower():
+                    return True
+            else:
+                return False
+    elif key in ['flow', 'shortest', 'triplet']:
       
         t_num = extract_last_num(truth)
         p_num = extract_last_num(predict.split('###')[-1])
         if abs(t_num - p_num) < 1e-2:
-            return True
-        return False
-                
-    elif key == 'hamilton':
-       
-        truth = truth.split('be: ')[-1].strip('.')
-
-        if truth in predict:
-            return True
-        return False
-                
-    elif key == 'matching':
-
-        truth = truth.split('\n')[-1]
-
-        t_num = extract_last_num(truth)
-        p_num = extract_last_num(predict.split('###')[-1])
-        if abs(t_num - p_num) < 1e-2:
-            return True
-        return False
-                
-    elif key == 'shortest_path':
-      
-        truth = truth.split('is')[-1].split('with')[0].strip(' ')
-
-            # t_num = extract_last_num(truth)
-        if truth in predict:
             return True
         return False
                 
     elif key == 'topology':
         
-        truth = truth.split('is: ')[-1].strip(' ').strip('.')
-        # v['id'] = i
-        # t_num = extract_last_num(truth)
-        if truth in predict:
-            return True
-        return False
+        # elif key == 'topology':
+        
+        if '###' in predict:
+            pre = predict.split('###')[-1].strip(' ')
+            truth = truth.split('###')[-1].strip(' ')
+            if truth in pre or pre in truth:
+                return True
+            return False
+        else:
+            truth = truth.split('###')[-1].split(',')
+            for t in truth:
+                if t in predict or t.strip(' ') in predict:
+                    return True
+            return False
 
-    elif key == 'GNN':
 
-        truths = truth.split('\n')[1:-1]
-
-        # t_num = extract_last_num(truth)
-        flag = True
-        for truth in truths:
-            if truth not in predict.split('###')[-1]:
-                flag = False
-                break
-        if flag:
-            return True
-        return False
 
 def main(
     args,
@@ -132,18 +105,20 @@ def main(
     sources = []
     targets = []
     results = {}
-    for seed in  range(20):
+    for seed in  range(25,30):
         print(f'===========we are testing in {seed}====================')
         for lang in tasks:
             print(f'===========we are testing in {lang}====================')
             
+            if lang == 'flow' and seed >=22:
+                continue
             # file_path = args.data_path + f'/{lang}'
             # try:
             #     lang = LANGS[lang.split('.')[0]]
             # except:
             #     continue
             
-            with open(f'/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/train_set/{lang}_train.json') as f:
+            with open(f'/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/train_set_shuffle/{lang}_train.json') as f:
                 datas = f.readlines()
                 
             gen_datas_jsonl = Path(save_dir) / f"{seed}_gen_{lang}_datas.jsonl"
@@ -179,35 +154,35 @@ def main(
                         f.write("\n")
 
         # calculate acc
-        #     with open(gen_datas_jsonl) as f:
-        #         gen_datas = [json.loads(line) for line in f]
+            with open(gen_datas_jsonl) as f:
+                gen_datas = [json.loads(line) for line in f]
 
-        #     correct_results = []
-        #     wrong_results = []
-        #     for gen in gen_datas:
-        #         result = dict(
-        #             **gen,
-        #             extract_true=gen["source_data"]["answer"],
-        #             extract_pred=gen["output_str"].lstrip(),
-        #             is_correct=None,
-        #         )
+            correct_results = []
+            wrong_results = []
+            for gen in gen_datas:
+                result = dict(
+                    **gen,
+                    extract_true=gen["source_data"]["answer"],
+                    extract_pred=gen["output_str"].lstrip(),
+                    is_correct=None,
+                )
                 
-        #         if check(lang, result["extract_true"].lower(), result["extract_pred"].lower()):
+                if check(lang, result["extract_true"].lower(), result["extract_pred"].lower()):
                 
-        #         # if result["extract_pred"].lower() in result["extract_true"].lower() or result["extract_true"].lower() in result["extract_pred"].lower():
-        #             result["is_correct"] = True
-        #             correct_results.append(result)
-        #         else:
-        #             result["is_correct"] = False
-        #             wrong_results.append(result)
+                # if result["extract_pred"].lower() in result["extract_true"].lower() or result["extract_true"].lower() in result["extract_pred"].lower():
+                    result["is_correct"] = True
+                    correct_results.append(result)
+                else:
+                    result["is_correct"] = False
+                    wrong_results.append(result)
 
         #     print(f'=======done {lang}============')
-        #     result = f"Accuracy={len(correct_results)}/({len(correct_results)}+{len(wrong_results)})={len(correct_results)/(len(correct_results) + len(wrong_results))}"
-        #     print(result)
-        #     with open(Path(save_dir) / f"{lang}_correct.json", "w", encoding='utf-8') as f:
-        #         json.dump(correct_results, f, ensure_ascii=False, indent=4)
-        #     with open(Path(save_dir) / f"{lang}_wrong.json", "w", encoding='utf-8') as f:
-        #         json.dump(wrong_results, f, ensure_ascii=False, indent=4)
+            result = f"Accuracy={len(correct_results)}/({len(correct_results)}+{len(wrong_results)})={len(correct_results)/(len(correct_results) + len(wrong_results))}"
+            print(result)
+            with open(Path(save_dir) / f"{lang}_correct.json", "w", encoding='utf-8') as f:
+                json.dump(correct_results, f, ensure_ascii=False, indent=4)
+            with open(Path(save_dir) / f"{lang}_wrong.json", "w", encoding='utf-8') as f:
+                json.dump(wrong_results, f, ensure_ascii=False, indent=4)
         #     num_result = float(result.split('=')[-1])
         #     if lang != 'En_gsm8k':
         #         results[lang] = num_result
@@ -245,7 +220,7 @@ def gsm8k_batch_gen(
     return input_str_list, output_str_list
 
 
-def get_batch_llama(model: LlamaForCausalLM, tokenizer: LlamaTokenizer, args):
+def get_batch_llama(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, args):
     @torch.inference_mode()
     def batch_llama(input_strs):
         input_ids_w_attnmask = tokenizer(
@@ -279,7 +254,7 @@ def get_batch_llama(model: LlamaForCausalLM, tokenizer: LlamaTokenizer, args):
 
 def get_model(model_path: str, is_bf16: bool = False):
     print(model_path)
-    tokenizer = LlamaTokenizer.from_pretrained(model_path, padding_side="left")
+    tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
     print(tokenizer.pad_token)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
@@ -291,13 +266,13 @@ def get_model(model_path: str, is_bf16: bool = False):
     print(tokenizer.padding_side)
 
     if is_bf16:
-        model = LlamaForCausalLM.from_pretrained(
+        model = AutoModelForCausalLM.from_pretrained(
             model_path,
             torch_dtype=torch.bfloat16,
              device_map='auto'
         )
     else:
-        model = LlamaForCausalLM.from_pretrained(
+        model = AutoModelForCausalLM.from_pretrained(
             model_path,
         ).cuda()
     model.eval()

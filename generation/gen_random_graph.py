@@ -76,10 +76,8 @@ def create_smaller_graph(min_nodes, max_nodes, max_edges, minimum, maximum, weig
     if not 0 <= maximum <= 1 or not 0 <= minimum <= 1:
         raise ValueError("Sparsity must be between 0 and 1.")
     
-    if max_nodes <= 10:
-        num_nodes = max(randint(min_nodes, max_nodes)/2, 3)
-    elif max_nodes > 10 and max_nodes <= 15:
-        num_nodes = max(randint(min_nodes, max_nodes)/2, 4)
+    num_nodes = max(randint(min_nodes, max_nodes)/2, 3)
+    # num_nodes = min(num_nodes, 10)
     
     if directed:
         G = nx.DiGraph()
@@ -91,7 +89,7 @@ def create_smaller_graph(min_nodes, max_nodes, max_edges, minimum, maximum, weig
     lower_limit_edges = int(minimum * max_possible_edges)
     upper_limit_edges = int(maximum * max_possible_edges)
     
-    num_edges_to_add = randint(lower_limit_edges, min(upper_limit_edges, max_edges))
+    num_edges_to_add = randint(lower_limit_edges, min(upper_limit_edges, max_edges))/2
 
     if num_edges_to_add == 0:
         num_edges_to_add = 1
