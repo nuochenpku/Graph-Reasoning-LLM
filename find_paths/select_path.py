@@ -246,15 +246,21 @@ def align_rft_paths(sample: Dict, positive: bool=True):
     
     if positive:
         len_rft_paths = compute_and_sort_length(sample['pos_response'], sample['CoT_response'])
+        
     else:
         len_rft_paths = compute_and_sort_length(sample['neg_response'], sample['CoT_response'])
         
     if len_rft_paths != []:
         rft_paths.append(len_rft_paths[-2:])
         
-    rft_paths.append(sample['neg_sort']['edit'][-1])
-    rft_paths.append(sample['neg_sort']['jaccard'][-1])
-    rft_paths.append(sample['neg_sort']['tfidf'][-1])
+    if positive:
+        rft_paths.append(sample['neg_sort']['edit'][-1])
+        rft_paths.append(sample['neg_sort']['jaccard'][-1])
+        rft_paths.append(sample['neg_sort']['tfidf'][-1])
+    else:
+        rft_paths.append(sample['neg_sort']['edit'][0])
+        rft_paths.append(sample['neg_sort']['jaccard'][0])
+        rft_paths.append(sample['neg_sort']['tfidf'][0])
             
             
     ## add embedding $ k-means
