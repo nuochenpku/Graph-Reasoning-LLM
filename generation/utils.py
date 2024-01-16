@@ -5,6 +5,7 @@ from transformers import LlamaTokenizer
 import os
 import networkx as nx
 from itertools import combinations
+import random
 
 def load_yaml(dir):
     with open(dir, "r") as stream:
@@ -29,6 +30,17 @@ def graph_details(G):
         edges_flat = " ".join(f"({i}->{j})" for i, j in edges)
     else:
         edges_flat = " ".join(str(edge) for edge in edges)
+    return num_nodes, edges_flat
+
+
+def graph_details_shuffle(G):
+    num_nodes = G.number_of_nodes()
+    edges = list(G.edges())
+    random.shuffle(edges)  # Shuffle the edges
+    if isinstance(G, nx.DiGraph):
+        edges_flat = " ".join(f"({i}->{j})" for i, j in edges)
+    else:
+        edges_flat = " ".join(f"({i}, {j})" for i, j in edges)
     return num_nodes, edges_flat
 
 def graph_details_with_weight(G):

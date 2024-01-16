@@ -1,5 +1,5 @@
 from networkx.algorithms import bipartite
-from utils import write_to_file, getTokenizer, graph_details
+from utils import write_to_file, getTokenizer, graph_details_shuffle
 from gen_random_graph import create_random_graph, create_random_bipartite_graph
 from utils import getMaxEdges
 
@@ -33,7 +33,7 @@ def bipartite_datasets_generation(config):
         while 1:
             random_graph = create_random_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             bi = if_bipartite(random_graph)
-            node_nums, edges_flat = graph_details(random_graph)
+            node_nums, edges_flat = graph_details_shuffle(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
             # duplicate check
             if input_prompt in dup:
@@ -44,7 +44,7 @@ def bipartite_datasets_generation(config):
             else:
                 ans = config["answer"].format("No")
             # length check
-            if len(tokenizer.encode(input_prompt + ans)) > 3000:
+            if len(tokenizer.encode(input_prompt + ans)) > 2500:
                 continue
             sample = {}
             sample["index"] = index
@@ -61,7 +61,7 @@ def bipartite_datasets_generation(config):
         while 1:
             random_graph = create_random_bipartite_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             bi = if_bipartite(random_graph)
-            node_nums, edges_flat = graph_details(random_graph)
+            node_nums, edges_flat = graph_details_shuffle(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
             # duplicate check
             if input_prompt in dup:
@@ -72,7 +72,7 @@ def bipartite_datasets_generation(config):
             else:
                 ans = config["answer"].format("No")
             # length check
-            if len(tokenizer.encode(input_prompt + ans)) > 3000:
+            if len(tokenizer.encode(input_prompt + ans)) > 2500:
                 continue
             sample = {}
             sample["index"] = index

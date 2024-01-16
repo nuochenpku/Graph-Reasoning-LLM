@@ -5,6 +5,12 @@ from typing import Optional, Dict, Sequence, List
 from methods import filter_string, sorted_distance, sorted_jaccard, sorted_tfidf
 from pathlib import Path
 import json
+from methods import TextModel
+import tqdm
+import torch
+from sklearn.cluster import KMeans
+import numpy as np
+
 
 
 def extract_last_num(text: str) -> float:
@@ -28,7 +34,7 @@ def check(key, truth, predict):
                 return True
             return False
         else:
-            matches = re.findall(r'(yes|no)', predict, flags=re.IGNORECASE)
+            matches = re.findall(r'\b(yes|no)\b', predict, flags=re.IGNORECASE)
             if matches:
                 last_match = matches[-1].lower()
                 if last_match == 'yes' and 'yes' in truth.lower():
@@ -63,12 +69,12 @@ def check(key, truth, predict):
             return False
 
 
-## define a function that read the different task files where each task has 20 json files with indicing from 0 to 20def read_task_files(folder_path):
+## define a function that read the different task files where each task has 20 json files with indicing from 0 to 20
 def align_json_files(task_dicts: Dict, folder_path: str, task: str):
     
     # aligned_list = []
     aligned_dict = task_dicts
-    for file_index in range(21):
+    for file_index in range(10):
         file_path = os.path.join(folder_path, f"{file_index}_gen_{task}_datas.jsonl")
         
         with open(file_path, "r") as file:
@@ -85,7 +91,7 @@ def align_json_files(task_dicts: Dict, folder_path: str, task: str):
                     aligned_dict[query]['neg_response'] = []
                     aligned_dict[query]['pos_response'] = []
                     
-                    if check(task, json_data['answer'], response) and len(response) >15:
+                    if check(task, json_data['answer'], response) and len(response) > 20:
                         aligned_dict[query]['pos_response'].append(response)
                         
                     elif not check(task, json_data['answer'], response):
@@ -94,7 +100,8 @@ def align_json_files(task_dicts: Dict, folder_path: str, task: str):
                     aligned_dict[query]['task'] = task
                     
                 else:
-                    if check(task, json_data['answer'], response)  and len(response) >15:
+                    print(1)
+                    if check(task, json_data['answer'], response)  and len(response) > 20:
                         aligned_dict[query]['pos_response'].append(response)
                         
                     elif not check(task, json_data['answer'], response):
@@ -107,13 +114,13 @@ def align_json_files(task_dicts: Dict, folder_path: str, task: str):
     return aligned_dict
                
 def CoT_response(task):
-    with open('/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/data/graph_source_data_v1_dsformat.json') as  f:
+    with open('/home/yuhanli/Graph-Reasoning-LLM/datasets/data/graph_source_data_v1_dsformat.json') as  f:
         datas = f.readlines()
     
     task_dicts = {}
     for data in datas:
         data = json.loads(data)
-        query = data['query']
+        query = data['query'].replace('\n', '')
         if task == data['task']:
             task_dict = {
                 "CoT_response": data["CoT_response"],
@@ -163,10 +170,7 @@ def find_path(task_dicts):
                     'tfidf': tfidf
                 }
                 value['neg_sort'] = neg_sort
-                
-        ### add k-means and cosine similarity
-        ### TO-DO
-        
+            
         ### collect as final data dicts:
         if 'neg_sort' in value and 'pos_sort' in value:
             diver_dicts[key] = value
@@ -189,8 +193,6 @@ def compute_and_sort_length(lst: List[str], string: str=None) -> List[str]:
     else:
         sorted_strings = [element[0] for element in sorted_lengths]
     return sorted_strings
-
-
 
 
 def parse_triplet_shortest(lst: List[str], string: str=None):
@@ -269,8 +271,27 @@ def align_rft_paths(sample: Dict, positive: bool=True):
     return list(set(rft_paths)) 
   
   
-        
-    
+def text_emb(model, paths, type):
+    device = 0
+    model = model.to(device)
+    text_features = []
+    for text in tqdm.tqdm(paths, desc="Processing" + type + "paths"):
+        text_features.append(model(text).unsqueeze(dim=0).cpu())
+    features = torch.cat(text_features, dim=0)
+    print("Paths features processed!")
+    return features    
+
+# 2, 3, 4
+def kmeans(text_embs, k):
+    kmeans = KMeans(n_clusters=k, random_state=0)
+    kmeans.fit(text_embs)
+    centers = kmeans.cluster_centers_
+    center_indices = []
+    for center in centers:
+        distances = np.linalg.norm(text_embs - center, axis=1)
+        center_indices.append(np.argmin(distances))
+    return center_indices
+
    
 def merge_rft_paths(sample: Dict):
     
@@ -297,47 +318,48 @@ def merge_rft_paths(sample: Dict):
             neg_rft_paths = parse_triplet_shortest(sample['neg_response'])
     else:
         if 'CoT_response' in sample:
-            
             pos_rft_paths = align_rft_paths(sample)
             neg_rft_paths = align_rft_paths(sample)
-            
         else:
-            
             # if positive:
             len_rft_paths = compute_and_sort_length(sample['pos_response'], sample['CoT_response'])
-        # else:
+            # else:
             len_rft_paths = compute_and_sort_length(sample['neg_response'], sample['CoT_response'])
+    
+    text_model = TextModel("SentenceBert")
+    pos_embs = text_emb(text_model, pos_rft_paths, "positive")
+    neg_embs = text_emb(text_model, neg_rft_paths, "negative")
+
             
-            
-            ####add embedding & cosine
-            ### TO-DO
+    ####add embedding & cosine
+    ### TO-DO
         
     sample['pos_rft_paths'] =  pos_rft_paths 
     sample['neg_rft_paths'] =  neg_rft_paths 
     return sample        
-        
-    
-if __name__ == 'main':
-    
+
+
+def main():
     tasks = ['connectivity', 'cycle','flow', 'bipartite', 'hamilton', 'triplet', 'shortest', 'topology', 'substructure',]
     
     diverse_dir = ''
 
-    
     for task in tasks:
     
         task_dicts = CoT_response(task)
-    
-        task_aligned_dicts = align_json_files(task_dicts, folder_path='', task=task)
+
+        folder_path = "/home/yuhanli/Graph-Reasoning-LLM/datasets/inference_data"
+        folder_path = os.path.join(folder_path, task)
+        task_aligned_dicts = align_json_files(task_dicts, folder_path, task=task)
         
-        ### diver_dicts has pos and negs, neg_dicts only negs, pos_dicts only poss
         diver_dicts, neg_dicts, pos_dicts = find_path(task_aligned_dicts)
         
         with open(Path(diverse_dir) / f"only_diverse_paths.json", "w", encoding='utf-8') as f:
             json.dump(diver_dicts, f, ensure_ascii=False, indent=4)
         
         for query, value in diver_dicts:
-            new_sample = merge_rft_paths(value)
-        
-        
-        
+            new_sample = merge_rft_paths(value) 
+
+
+if __name__ == "__main__":
+    main()
