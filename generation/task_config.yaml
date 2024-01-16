@@ -394,7 +394,7 @@ connectivity_train_v2: &connectivity_train_v2
   Given a graph and a pair of nodes, you need to output Yes or No, indicating whether the node i and node j are connected. 
   Q: The nodes are numbered from {} to {}, and the edges are: {}. Is there a path between node {} and node {}?"
   answer: "### {}"
-  store_path: "../datasets/train_set_v2/connecivity_train.json"
+  store_path: "../datasets/train_set_v2/connectivity_train.json"
 
 
 cycle_train_v2: &cycle_train_v2
