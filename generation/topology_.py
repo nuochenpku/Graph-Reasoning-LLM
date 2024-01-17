@@ -1,5 +1,5 @@
 import networkx as nx
-from utils import write_to_file, getTokenizer, graph_details_shuffle, getMaxEdges
+from utils import write_to_file, getTokenizer, graph_details, getMaxEdges
 from gen_random_graph import create_topology_graph
 
 def topological_sort(G):
@@ -36,7 +36,7 @@ def topology_datasets_generation(config):
         while 1:
             random_graph = create_topology_graph(min_nodes, max_nodes, min_ratio, max_ratio, weight, directed)
             topology_paths = topological_sort(random_graph)
-            node_nums, edges_flat = graph_details_shuffle(random_graph)
+            node_nums, edges_flat = graph_details(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
             # duplicate check
             if input_prompt in dup:
