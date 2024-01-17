@@ -8,32 +8,12 @@ def count_subgraph_occurrences(G, g):
     matcher = isomorphism.DiGraphMatcher(G, g)
     return matcher.subgraph_is_monomorphic()
 
-# def count_subgraph_occurrences(G, g):
-#     def can_map(u, v):
-#         return G.degree(v) >= g.degree(u)
-
-#     def is_match(mapping, g_nodes, G_nodes):
-#         if len(mapping) == len(g_nodes):
-#             return 1
-#         else:
-#             total_count = 0
-#             u = next(node for node in g_nodes if node not in mapping)
-#             for v in G_nodes:
-#                 if v not in mapping.values() and can_map(u, v):
-#                     mapping[u] = v
-#                     total_count += is_match(mapping, g_nodes, G_nodes)
-#                     del mapping[u]
-#             return total_count
-
-#     g_nodes_sorted = sorted(g.nodes(), key=lambda x: (-g.degree(x), x))
-#     G_nodes_sorted = sorted(G.nodes(), key=lambda x: (-G.degree(x), x))
-    
-#     return is_match({}, g_nodes_sorted, G_nodes_sorted)
 
 def relabel_nodes_to_alphabet(G):
     mapping = dict(zip(G.nodes(), string.ascii_lowercase))
     H = nx.relabel_nodes(G, mapping)
     return H
+
 
 def substruc_datasets_generation(config):
     tokenizer = getTokenizer()
