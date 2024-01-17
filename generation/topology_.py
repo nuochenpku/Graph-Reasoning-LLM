@@ -1,6 +1,7 @@
 import networkx as nx
-from utils import write_to_file, getTokenizer, graph_details, getMaxEdges
+from utils import write_to_file, getTokenizer, graph_details, getMaxEdges, graph_details_shuffle
 from gen_random_graph import create_topology_graph
+import random
 
 def topological_sort(G):
     try:
@@ -36,7 +37,10 @@ def topology_datasets_generation(config):
         while 1:
             random_graph = create_topology_graph(min_nodes, max_nodes, min_ratio, max_ratio, weight, directed)
             topology_paths = topological_sort(random_graph)
-            node_nums, edges_flat = graph_details(random_graph)
+            if random.random() <= 0.5:
+                node_nums, edges_flat = graph_details(random_graph)
+            else:
+                node_nums, edges_flat = graph_details_shuffle(random_graph)
             input_prompt = config["prompt"].format(0, node_nums-1, edges_flat)
             # duplicate check
             if input_prompt in dup:
@@ -44,7 +48,7 @@ def topology_datasets_generation(config):
             dup.add(input_prompt)
             ans = config["answer"].format(str(topology_paths))
             # length check
-            if len(tokenizer.encode(input_prompt + ans)) > 3000:
+            if len(tokenizer.encode(input_prompt + ans)) > 2500:
                 continue
             # yes/no check
             if len(topology_paths) != 1:
