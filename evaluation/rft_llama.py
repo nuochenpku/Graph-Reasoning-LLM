@@ -34,7 +34,7 @@ def check(key, truth, predict):
                 return True
             return False
         else:
-            matches = re.findall(r'(yes|no)', predict, flags=re.IGNORECASE)
+            matches = re.findall(r'\b(yes|no)\b', predict, flags=re.IGNORECASE)
             if matches:
                 last_match = matches[-1].lower()
                 if last_match == 'yes' and 'yes' in truth.lower():
