@@ -34,7 +34,7 @@ def check(key, truth, predict):
                 return True
             return False
         else:
-            matches = re.findall(r'(yes|no)', predict, flags=re.IGNORECASE)
+            matches = re.findall(r'\b(yes|no)\b', predict, flags=re.IGNORECASE)
             if matches:
                 last_match = matches[-1].lower()
                 if last_match == 'yes' and 'yes' in truth.lower():
@@ -87,7 +87,7 @@ def main(
 
     pure_model = model_path.split('/')[-1]
     if save_dir is None:
-        save_dir = f"/cpfs/user/chennuo/CN/Graph_RFT_Data/Results/{pure_model}/{model.dtype}/xrft"
+        save_dir = f"/cpfs/user/chennuo/CN/Graph_RFT_Data/Results/{pure_model}/{model.dtype}/test"
     Path(save_dir).mkdir(parents=True, exist_ok=True)
     
 
@@ -102,7 +102,7 @@ def main(
         print(f'===========we are testing in {lang}====================')
         
      
-        with open(f'/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/train_set_shuffle/{lang}_train.json') as f:
+        with open(f'/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/test_set_v2_9000/{lang}_test.json') as f:
             datas = f.readlines()
             
         gen_datas_jsonl = Path(save_dir) / f"_gen_{lang}_datas.jsonl"
@@ -167,7 +167,18 @@ def main(
             json.dump(correct_results, f, ensure_ascii=False, indent=4)
         with open(Path(save_dir) / f"{lang}_wrong.json", "w", encoding='utf-8') as f:
             json.dump(wrong_results, f, ensure_ascii=False, indent=4)
-
+    
+        num_result = float(result.split('=')[-1])
+        results[lang] = num_result
+    average = sum(results.values()) / len(results)
+    print(average)
+    import csv
+    with open(Path(save_dir) / f"NLG_evaluate_results_bs{batch_size}.csv", 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Task', 'Accuracy'])
+        for key, value in results.items():
+            writer.writerow([key, value])
+        writer.writerow(['Average', average])
 
 def gsm8k_batch_gen(
     lang_, cur_gsm8k_batch, batch_llm, args
@@ -175,7 +186,7 @@ def gsm8k_batch_gen(
     lang = lang_ if lang_ != 'En_gsm8k' else 'English'
     prompt_no_input = (
       "Below is an instruction that describes a task. "
-        f"Write a response that appropriately completes the request.\n\n"
+        f"Write a response that appropriately completes the request step by step.\n\n"
         "### Instruction:\n{query}\n\n### Response:"
     )
     try:
@@ -202,13 +213,10 @@ def get_batch_llama(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, args)
             attention_mask=input_ids_w_attnmask.attention_mask,
             generation_config=GenerationConfig(
                 max_new_tokens=args.max_tokens,
-                do_sample=True,
-                temperature=0.9,  # t=0.0 raise error if do_sample=True
+                do_sample=False,
+                temperature=0.0,  # t=0.0 raise error if do_sample=True
             ),
         ).tolist()
-        
-        
-        
         
         
         real_output_ids = [
