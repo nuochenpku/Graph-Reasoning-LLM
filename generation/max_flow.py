@@ -54,7 +54,7 @@ def flow_datasets_generation(config):
             dup.add(input_prompt)
             ans = config["answer"].format(max_flow)
             # length check
-            if len(tokenizer.encode(input_prompt + ans)) > 3000:
+            if len(tokenizer.encode(input_prompt + ans)) > 2048:
                 continue
             sample = {}
             sample["index"] = index

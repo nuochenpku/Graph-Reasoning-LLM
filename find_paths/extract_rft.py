@@ -16,8 +16,6 @@ parser.add_argument('--dict_path', type=str, default="../datasets/rft_dpo_dicts"
 parser.add_argument('--save_path', type=str, default="../datasets/rft_files", help="save path")
 args = parser.parse_args()
 
-# \n, 
-
 def CoT_contained_path_extraction(rft_dict, npz_file):
     save_path = Path(args.save_path) / f"{args.task}_rft_paths.json"
     for key, value in rft_dict.items():
