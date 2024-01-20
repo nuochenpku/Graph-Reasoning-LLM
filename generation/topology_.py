@@ -22,18 +22,19 @@ def topology_datasets_generation(config):
         weight = config["weight"][i]
         directed = config["directed"][i]
         valid = 0
-        edges_number = [int(getMaxEdges(min_nodes) * min_ratio), int(getMaxEdges(max_nodes) * max_ratio)]
+        # edges_number = [int(getMaxEdges(min_nodes) * min_ratio), int(getMaxEdges(max_nodes) * max_ratio)]
+        edges_number = [min_ratio, max_ratio]
         nodes_number = [min_nodes, max_nodes]
         dup = set()
         # test duplicate check
-        if "test" in config["store_path"]:
-            # read from train
-            with open(config["store_path"].replace("test", "train"), "r") as f:
-                for line in f:
-                    if line.strip() == "":
-                        continue
-                    sample = eval(line.strip())
-                    dup.add(sample["input_prompt"])
+        # if "test" in config["store_path"]:
+        #     # read from train
+        #     with open(config["store_path"].replace("test", "train"), "r") as f:
+        #         for line in f:
+        #             if line.strip() == "":
+        #                 continue
+        #             sample = eval(line.strip())
+        #             dup.add(sample["input_prompt"])
         while 1:
             random_graph = create_topology_graph(min_nodes, max_nodes, min_ratio, max_ratio, weight, directed)
             topology_paths = topological_sort(random_graph)

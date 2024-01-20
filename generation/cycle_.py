@@ -22,18 +22,19 @@ def cycle_datasets_generation(config):
         weight = config["weight"][i]
         directed = config["directed"][i]
         valid = 0
-        edges_number = [int(getMaxEdges(min_nodes) * min_ratio), int(getMaxEdges(max_nodes) * max_ratio)]
+        # edges_number = [int(getMaxEdges(min_nodes) * min_ratio), int(getMaxEdges(max_nodes) * max_ratio)]
+        edges_number = [min_ratio, max_ratio]
         nodes_number = [min_nodes, max_nodes]
         dup = set()
         # test duplicate check
-        if "test" in config["store_path"]:
-            # read from train
-            with open(config["store_path"].replace("test", "train"), "r") as f:
-                for line in f:
-                    if line.strip() == "":
-                        continue
-                    sample = eval(line.strip())
-                    dup.add(sample["input_prompt"])
+        # if "test" in config["store_path"]:
+        #     # read from train
+        #     with open(config["store_path"].replace("test", "train"), "r") as f:
+        #         for line in f:
+        #             if line.strip() == "":
+        #                 continue
+        #             sample = eval(line.strip())
+        #             dup.add(sample["input_prompt"])
         # label balance
         pos = 0
         while 1:
@@ -50,7 +51,7 @@ def cycle_datasets_generation(config):
                 pos += 1
             else:
                 ans = config["answer"].format("No")
-            if cyclic and pos > config["samples_needed"][i] / 2:
+            if cyclic and pos > config["samples_needed"][i] / 2 and min_ratio < 0.4:
                 continue
             # length check
             if len(tokenizer.encode(input_prompt + ans)) > 3000:

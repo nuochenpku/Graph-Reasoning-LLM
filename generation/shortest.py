@@ -20,19 +20,20 @@ def shortest_datasets_generation(config):
         max_ratio = config["max_ratio"][i]
         weight = config["weight"][i]
         directed = config["directed"][i]
-        edges_number = [int(getMaxEdges(min_nodes) * min_ratio), int(getMaxEdges(max_nodes) * max_ratio)]
+        # edges_number = [int(getMaxEdges(min_nodes) * min_ratio), int(getMaxEdges(max_nodes) * max_ratio)]
+        edges_number = [min_ratio, max_ratio]
         nodes_number = [min_nodes, max_nodes]
         valid = 0
         dup = set()
         # test duplicate check
-        if "test" in config["store_path"]:
-            # read from train
-            with open("../datasets/train_set/shortest_train.json", "r") as f:
-                for line in f:
-                    if line.strip() == "":
-                        continue
-                    sample = eval(line.strip())
-                    dup.add(sample["input_prompt"])
+        # if "test" in config["store_path"]:
+        #     # read from train
+        #     with open("../datasets/train_set/shortest_train.json", "r") as f:
+        #         for line in f:
+        #             if line.strip() == "":
+        #                 continue
+        #             sample = eval(line.strip())
+        #             dup.add(sample["input_prompt"])
         while 1:
             random_graph = create_random_graph(min_nodes, max_nodes, max_edges, min_ratio, max_ratio, weight, directed)
             nodes = list(random_graph.nodes())
@@ -55,7 +56,7 @@ def shortest_datasets_generation(config):
             dup.add(input_prompt)
             ans = config["answer"].format(path_value)
             # length check
-            if len(tokenizer.encode(input_prompt + ans)) > 2048:
+            if len(tokenizer.encode(input_prompt + ans)) > 3000:
                 continue
             sample = {}
             sample["index"] = index
