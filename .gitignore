@@ -4,3 +4,4 @@ __pycache__/
 *$py.class
 datasets/embeddings/*
 datasets/xrft/*
+datasets/dpo_data/*
