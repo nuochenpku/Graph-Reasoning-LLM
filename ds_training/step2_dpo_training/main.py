@@ -234,6 +234,8 @@ def get_batch_logps(logits, input_ids, label_mask):
 def main():
     args = parse_args()
 
+    # import wandb
+    
     if args.local_rank == -1:
         device = torch.device(get_accelerator().device_name())
     else:
@@ -261,6 +263,8 @@ def main():
         'train_batch_size'] = args.per_device_train_batch_size * torch.distributed.get_world_size(
         ) * args.gradient_accumulation_steps
 
+
+    # wandb.init(project="my-math_dpo", config=ds_config)
     # If passed along, set the training seed now.
     set_random_seed(args.seed)
 
@@ -482,7 +486,7 @@ def main():
             if args.add_sft:
                 loss  = loss + 0.1*sft_loss
             
-            if args.print_loss:
+            if args.print_loss and step %5 ==0 :
                 try:    
                     print(
                         f"Epoch: {epoch}, Step: {step}, Rank: {torch.distributed.get_rank()}, loss = {loss}, sft_loss= {sft_loss}"
