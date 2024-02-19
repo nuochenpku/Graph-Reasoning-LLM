@@ -41,18 +41,9 @@ Our checkpoints and dataset are avaliable at HuggingFace. You can directly downl
 
 
 
-Before we start, we need to transfer our data into the deepspeed training format:
+Before we start, we need to transfer our data into the [deepspeed](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning) training format.
 
-```
-
-alpaca_template = "Below is an instruction that describes a task. Write a response that appropriately completes the request.  \n### Instruction:\n{query}\n\n### Response:"
-
-query = "Janet's ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?"
-print(output)
-
-```
-
-
+You can see examples in our **dataset/GraphInstruct-DPO-ds.json** file.
 
 
 ### Requirements
@@ -63,14 +54,109 @@ pip -r install requirements.txt
 
 ### Phase1: Mixed-Task Training 
 
-
-
-### Requirements
-
 ```
-pip -r install requirements.txt
+cd training/step1_supervised_finetuning
+bash training_scripts/single_node/run_graph.sh
 ```
 
+which consists of the following commands:
+
+```
+
+#!/bin/bash
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: Apache-2.0
+# DeepSpeed Team
+OUTPUT=$1
+ZERO_STAGE=$2
+DATA_PATH=$3
+MODEL_PATH=$4
+if [ "$OUTPUT" == "" ]; then
+    OUTPUT=/output/deepspeed/nlgreasoning/
+fi
+if [ "$ZERO_STAGE" == "" ]; then
+    ZERO_STAGE=3
+fi 
+mkdir -p $OUTPUT
+
+deepspeed --include localhost:0,1,2,3 --master_port=25001 main.py  \
+   --data_path local/jsonfile_graph/$DATA_PATH \
+   --data_split 10,0,0 \
+   --model_name_or_path $MODEL_PATH \
+   --per_device_train_batch_size 4 \
+   --per_device_eval_batch_size 2 \
+   --max_seq_len 2048 \
+   --learning_rate 5e-6  \
+   --weight_decay 0. \
+   --num_train_epochs 2  \
+   --gradient_accumulation_steps 2 \
+   --lr_scheduler_type cosine \
+   --num_warmup_steps 500 \
+   --seed 1234 \
+   --save_interval 5000 \
+   --zero_stage $ZERO_STAGE \
+   --deepspeed \
+   --data_output_path $OUTPUT \
+   --gradient_checkpointing \
+   --output_dir $OUTPUT \
+   &> $OUTPUT/training.log &
+
+```
+
+
+### Phase2: DPO Training 
+
+
+```bash
+cd training/step2_dpo_training
+bash training_scripts/single_node/run_graph.sh
+```
+
+which consists of the following commands:
+
+```
+
+#!/bin/bash
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: Apache-2.0
+# local/xjsonfile/rftV2
+# DeepSpeed Team
+OUTPUT=$1
+ZERO_STAGE=$2
+DPO_PATH=$3
+SFT_PATH=$4
+if [ "$OUTPUT" == "" ]; then
+    OUTPUT=output/deepspeed/nlgreasoning/dpo_beta0.5/
+fi
+if [ "$ZERO_STAGE" == "" ]; then
+    ZERO_STAGE=3
+fi
+mkdir -p $OUTPUT
+
+deepspeed --include localhost:0,1,2,3,4,5,6,7 --master_port=25001 main.py  \
+   --data_path local/jsonfile_graph/$DPO_PATH \
+   --data_split 0,10,0 \
+   --model_name_or_path $SFT_PATH \
+   --per_device_train_batch_size 2 \
+   --per_device_eval_batch_size 2 \
+   --max_seq_len 2048 \
+   --learning_rate 5e-6  \
+   --weight_decay 0. \
+   --num_train_epochs 3  \
+   --gradient_accumulation_steps 2 \
+   --lr_scheduler_type cosine \
+   --num_warmup_steps 100 \
+   --seed 1234 \
+   --beta 0.5 \
+    --print_loss \
+   --zero_stage $ZERO_STAGE \
+   --deepspeed \
+   --data_output_path $OUTPUT \
+   --gradient_checkpointing \
+   --output_dir $OUTPUT \
+   &> $OUTPUT/training.log &
+
+```
 
 
 
