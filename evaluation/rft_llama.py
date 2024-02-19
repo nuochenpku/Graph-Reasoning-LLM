@@ -87,38 +87,21 @@ def main(
 
     pure_model = model_path.split('/')[-1]
     if save_dir is None:
-        save_dir = f"/cpfs/user/chennuo/CN/Graph_RFT_Data/Results/{pure_model}/{model.dtype}/xrft"
+        save_dir = f"/Graph_RFT_Data/Results/{pure_model}/{model.dtype}/rft"
     Path(save_dir).mkdir(parents=True, exist_ok=True)
     
     
-    # test_files =  get_all_tests(args.data_path)
-    
-    # tasks = ['connectivity', 'cycle','flow', 'GNN', 'hamilton', 'matching','shortest_path', 'topology']
-    # tasks = ['connectivity', 'cycle']
+
     tasks = ['cycle', 'connectivity', 'hamilton', 'substructure', 'bipartite', 'flow', 'shortest', 'triplet', 'topology']
-    # if args.lang_only == '':
-    #     langs = test_files
-       
-    # else:
-        
-    #     langs = [args.lang_only.lower() +'.tsv']
     sources = []
     targets = []
     results = {}
-    for seed in  range(25,30):
+    for seed in  range(0,seed):
         print(f'===========we are testing in {seed}====================')
         for lang in tasks:
             print(f'===========we are testing in {lang}====================')
             
-            if lang == 'flow' and seed >=22:
-                continue
-            # file_path = args.data_path + f'/{lang}'
-            # try:
-            #     lang = LANGS[lang.split('.')[0]]
-            # except:
-            #     continue
-            
-            with open(f'/cpfs/user/chennuo/CN/Graph-Reasoning-LLM/datasets/train_set_shuffle/{lang}_train.json') as f:
+            with open(f'args.data_path/{lang}_train.json') as f:
                 datas = f.readlines()
                 
             gen_datas_jsonl = Path(save_dir) / f"{seed}_gen_{lang}_datas.jsonl"
@@ -183,22 +166,7 @@ def main(
                 json.dump(correct_results, f, ensure_ascii=False, indent=4)
             with open(Path(save_dir) / f"{lang}_wrong.json", "w", encoding='utf-8') as f:
                 json.dump(wrong_results, f, ensure_ascii=False, indent=4)
-        #     num_result = float(result.split('=')[-1])
-        #     if lang != 'En_gsm8k':
-        #         results[lang] = num_result
-        #     else:
-        #         gsm8k = num_result
-        # average = sum(results.values()) / len(results)
-        # print(average)
-        # import csv
-        # with open(Path(save_dir) / f"NLG_evaluate_results_bs{batch_size}.csv", 'w', newline='') as file:
-        #     writer = csv.writer(file)
-        #     writer.writerow(['Task', 'Accuracy'])
-        #     for key, value in results.items():
-        #         writer.writerow([key, value])
-        #     writer.writerow(['Average', average])
-        # writer.writerow(['GSM8K', gsm8k])
-    
+
 
 
 def gsm8k_batch_gen(
@@ -303,24 +271,12 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument(
-        "--streategy",
-        type=str,
-        help="which streategy to evaluate the model",
-        required=True,
-        choices=['Parallel','Cross']
-    )
-    parser.add_argument(
         "--batch_size",
         type=int,
         help="batchsize",
         required=True
     )
-    parser.add_argument(
-        "--lang_only",
-        type=str,
-        help="specific language to test",
-        default = ''
-    )
+
     parser.add_argument(
         "--shot",
         type=int,
@@ -349,7 +305,7 @@ if __name__ == "__main__":
         "--data_path",
         type=str,
         help="specific language to test",
-        default = '/cpfs/user/chennuo/CN/XBenchMARK/Cross-Lingual-Consistency/1_easyrun/BMLAMA53'
+        default = './dataset/train_set'
     )
     args = parser.parse_args()
 
