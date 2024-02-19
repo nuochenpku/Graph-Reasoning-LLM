@@ -43,6 +43,15 @@ Our checkpoints and dataset are avaliable at HuggingFace. You can directly downl
 
 Before we start, we need to transfer our data into the deepspeed training format:
 
+```
+
+alpaca_template = "Below is an instruction that describes a task. Write a response that appropriately completes the request.  \n### Instruction:\n{query}\n\n### Response:"
+
+query = "Janet's ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?"
+print(output)
+
+```
+
 
 
 
