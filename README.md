@@ -13,13 +13,38 @@ Our checkpoints and dataset are avaliable at HuggingFace. You can directly downl
 
 | GraphWiz   	| Mixed-Task Training                                       	| DPO                                                       	|
 |-----	|---------------------------------------------------------------	|---------------------------------------------------------------------------	|
-| 🤗**7B-LLaMA 2**  	| 🐙 [GraphWiz-7B](https://huggingface.co/GraphWiz/Parallel_7B)   	| 🐙 [GraphWiz-7B](https://huggingface.co/GraphWiz/Cross_7B)  	|
-| 🤗**13B-LLaMA 2** 	| 🐙 [GraphWiz-13B](https://huggingface.co/GraphWiz/Parallel_13B/tree/main) 	| 🐙 [GraphWiz-13B](https://huggingface.co/GraphWiz/Cross_13B)	|
-| 🤗**7B-Mistral** 	| [**GrpahWiz-7B**](https://huggingface.co/GraphWiz/Mistral-7B), [**GrpahWiz-7B-RFT**](https://huggingface.co/GraphWiz/Mistral-7B-RFT)   	| 🐙 [GraphWiz-DPO]() 	|
+| 🤗**7B-LLaMA 2**  	| 🐙 [**GraphWiz-7B**]()   	| 🐙 [**GraphWiz-7B**]()  	|
+| 🤗**13B-LLaMA 2** 	| 🐙 [**GraphWiz-13B**]() 	| 🐙 [**GraphWiz-13B**]()	|
+| 🤗**7B-Mistral** 	| [**GrpahWiz-7B**](https://huggingface.co/GraphWiz/Mistral-7B), [**GrpahWiz-7B-RFT**](https://huggingface.co/GraphWiz/Mistral-7B-RFT)   	| 🐙 [GraphWiz-DPO] 	|
 
+
+### 🤗Dataset🤗
+
+ 🤗[**GraphInstruct**](https://huggingface.co/datasets/GraphWiz/GraphInstruct), 
+ 
+ 🤗[**GraphInstruct-RFT**](https://huggingface.co/datasets/GraphWiz/GraphInstruct-RFT-72K)  
+
+ 🤗[**GraphInstruct-DPO**](https://huggingface.co/datasets/GraphWiz/GraphInstruct-DPO)  
+
+ 🤗[**GraphInstruct-Test**](https://huggingface.co/datasets/GraphWiz/GraphInstruct-Test)  
+
+
+*-vanilla version means to our model only trained with Q:R=1:1
+
+*-RFT refers to our model trained with all Q-R paths
+
+
+### Quick Start
 
 
 ## Training GraphWiz 
+
+
+
+Before we start, we need to transfer our data into the deepspeed training format:
+
+
+
 
 ### Requirements
 
