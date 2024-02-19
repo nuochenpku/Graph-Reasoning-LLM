@@ -207,10 +207,6 @@ def get_batch_llama(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, args)
             ),
         ).tolist()
         
-        
-        
-        
-        
         real_output_ids = [
             output_id[len(input_ids_w_attnmask.input_ids[i]) :] for i, output_id in enumerate(output_ids)
         ]
