@@ -7,19 +7,33 @@ this is project for training explicit graph reasoning large language models.
 pip -r install requirements.txt
 ```
 
-## Generate all train set
+
+
+
+
+### 
+
+## Generate Graph Problems
+
+### step1: Generate all train set
 
 ```
 cd scripts
 bash generate_all_train_datasets.sh
 ```
 
-## Generate all test set
+### Generate all test set
 
 ```
 cd scripts
 bash generate_all_test_datasets.sh
 ```
+
+### Step2: Data Augmentation with Rejection Sampling
+
+
+
+
 
 ## Trl Training
 
