@@ -1,7 +1,11 @@
-# Graph-Reasoning-LLM
-<div style="text-align: center;"><strong>This project aims at leveraging instruction-tuning to build a powerful instruction-following LLM that can map textural descriptions of graphs and structures, and then solve different graph problems explicitly in natural language.</strong></div>
+# GraphWiz (Graph-Reasoning-LLM)
+<div style="text-align: center;"><strong>This  project aims at leveraging instruction-tuning to build a powerful instruction-following LLM that can map textural descriptions of graphs and structures, and then solve different graph problems explicitly in natural language.</strong></div>
 
 
+<br>
+<div align="center">
+  <img src="figures/graphwiz.png" width="40%" title="Introduction Figure">
+</div>
 
 
 
@@ -74,6 +78,17 @@ Our checkpoints and dataset are avaliable at HuggingFace. You can directly downl
 
 
 ## Training GraphWiz 
+
+
+Our training strategies include two stage: **Mixed-task Training** and **DPO Alignment**.
+
+<br>
+<div align="center">
+  <img src="figures/training_strategy.png" width="100%" title="Introduction Figure">
+</div>
+
+
+
 
 
 
@@ -202,6 +217,14 @@ deepspeed --include localhost:0,1,2,3,4,5,6,7 --master_port=25001 main.py  \
 
 
 ## GraphInstruct  Construction
+
+
+<br>
+<div align="center">
+  <img src="figures/graph_collection.png" width="90%" title="Introduction Figure">
+</div>
+
+
 If you want to construct additional graph problem data for training your own models for graph problem reasoning. Please refer to the following:
 
 ### Generate Graph Problems
