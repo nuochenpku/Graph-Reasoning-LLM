@@ -1,5 +1,6 @@
 # Graph-Reasoning-LLM
-this is project for training explicit graph reasoning large language models.
+<div style="text-align: center;"><strong>This project aims at leveraging instruction-tuning to build a powerful instruction-following LLM that can map textural descriptions of graphs and structures, and then solve different graph problems explicitly in natural language.</strong></div>
+
 
 
 
