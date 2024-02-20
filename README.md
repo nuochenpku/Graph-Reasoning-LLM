@@ -8,7 +8,12 @@
 </div>
 
 
+This work pioneers exploring and building powerful Instruction-Followring LLMs for Graph Problem Solving. To accomplish this, we make the following works:
 
+- **GraphWiz**, a series of instruction-following LLMs that have strong  graph problem-solving abilities and output explicit reasoning paths.
+- **GraphInstruct**, which offers over 72.5k training samples across nine graph problem
+tasks, ranging in complexity from linear and polynomial to NP-complete, extending the scope, scale,
+and diversity of previous benchmarks
 
 
 
@@ -343,16 +348,3 @@ At last, you can obtain the json file like:
 
 
 
-
-
-
-## Trl Training
-
-change Llama_path & evaluation file path.
-
-```
-# dpo
-python training/dpo.py 
-# sft
-python training/sft.py
-```
