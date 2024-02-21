@@ -232,9 +232,12 @@ deepspeed --include localhost:0,1,2,3,4,5,6,7 --master_port=25001 main.py  \
 
 
 
+### Inference & Test
 
-
-
+```
+cd evaluation
+bash test_graph.sh
+```
 
 
 ## GraphInstruct  Construction
