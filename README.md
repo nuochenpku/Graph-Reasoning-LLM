@@ -82,6 +82,22 @@ Our checkpoints and dataset are avaliable at HuggingFace. You can directly downl
 ### Quick Start
 
 
+
+```
+# Use a pipeline as a high-level helper
+from transformers import pipeline
+
+pipe = pipeline("text-generation", model="GraphWiz/Mistral-7B")
+alpaca_template = "Below is an instruction that describes a task. Write a response that appropriately completes the request. \n### Instruction:\n{query}\n\n### Response:"
+
+query = "Find the shortest path between two nodes in an undirected graph. In an undirected graph, (i,j,k) means that node i and node j are connected with an undirected edge with weight k. Given a graph and a pair of nodes, you need to output the shortest path between the two nodes. Q: The nodes are numbered from 0 to 8, and the edges are: (0,1,4) (1,2,7) (1,7,1) (1,3,4) (2,6,2) (2,4,8) (2,7,5) (3,6,1) (4,8,3) (5,6,6) (6,8,8) (7,8,7). Give the weight of the shortest path from node 0 to node 8."
+
+
+input = alpaca_template.format(query = query)
+
+output = pipeline(input)[0]['generated_text']
+print(output)
+```
 ## Training GraphWiz 
 
 
