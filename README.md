@@ -58,9 +58,9 @@ Our checkpoints and dataset are avaliable at HuggingFace. You can directly downl
 
 | GraphWiz   	| Mixed-Task Training                                       	| DPO                                                       	|
 |-----	|---------------------------------------------------------------	|---------------------------------------------------------------------------	|
-| 🤗**7B-LLaMA 2**  	| 🪄 [**GraphWiz-7B**]()   	| 🪄 [**GraphWiz-7B**]()  	|
-| 🤗**13B-LLaMA 2** 	| 🪄 [**GraphWiz-13B**]() 	| 🪄 [**GraphWiz-13B**]()	|
-| 🤗**7B-Mistral** 	| 🪄[**GrpahWiz-7B**](https://huggingface.co/GraphWiz/Mistral-7B), [**GrpahWiz-7B-RFT**](https://huggingface.co/GraphWiz/Mistral-7B-RFT)   	| 🪄 [GraphWiz-DPO] 	|
+| 🤗**7B-LLaMA 2**  	| 🪄 [**GraphWiz-7B**](https://huggingface.co/GraphWiz/LLaMA2-7B), [**GraphWiz-7B-RFT**](https://huggingface.co/GraphWiz/LLaMA2-7B-RFT)    	| 🪄 [**GraphWiz-7B-DPO**](https://huggingface.co/GraphWiz/LLaMA2-7B-DPO)  	|
+| 🤗**13B-LLaMA 2** 	| 🪄 [**GraphWiz-13B**](https://huggingface.co/GraphWiz/LLaMA2-13B), [**GraphWiz-13B-RFT**](https://huggingface.co/GraphWiz/LLaMA2-13B-RFT)	| 🪄 [**GraphWiz-13B-DPO**](https://huggingface.co/GraphWiz/LLaMA2-13B-DPO)	|
+| 🤗**7B-Mistral** 	| 🪄[**GrpahWiz-7B**](https://huggingface.co/GraphWiz/Mistral-7B), [**GrpahWiz-7B-RFT**](https://huggingface.co/GraphWiz/Mistral-7B-RFT)   	| 🪄 [GraphWiz-7B-DPO] 	|
 
 
 ### 🤗Dataset🤗
