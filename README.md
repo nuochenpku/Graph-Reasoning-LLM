@@ -91,6 +91,18 @@ Our checkpoints and dataset are avaliable at HuggingFace. You can directly downl
 *-RFT refers to our model trained with all Q-R paths
 
 
+
+
+## **Table of Contents**
+
+- [ℹ QuickStart](#quick-start)
+- [🛠️ Training and Inference](#training-graphwiz)
+- [📜 Data Generation](#graphinstruct-construction)
+- [📖 Citation](#citation)
+
+
+
+
 ### Quick Start
 
 
@@ -252,7 +264,7 @@ bash test_graph.sh
 ```
 
 
-## GraphInstruct  Construction
+## GraphInstruct Construction
 
 
 <br>
