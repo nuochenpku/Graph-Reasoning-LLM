@@ -378,4 +378,14 @@ At last, you can obtain the json file like:
 - "**neg_rft_paths_5**" refers to the diverse ***InCorrect*** reasoning paths (<=5).
 
 
+## **Citation**
 
+Please cite our paper if you use our data, model or code. Please also kindly cite the original dataset papers. 
+```
+@articles{chen2024graphwiz,
+  title={GraphWiz: An Instruction-Following Language Model for Graph Problems},
+  author={Nuo Chen, Yuhan Li, Jianheng Tang, Jia Li},
+  journal={arXiv preprint arXiv:2402.16029},
+  year={2024}
+}
+```
