@@ -28,8 +28,9 @@ tasks, ranging in complexity from linear and polynomial to NP-complete, extendin
 and diversity of previous benchmarks.
 
 
+#### News
 
-
+- This paper is accepted by KDD 2024! 🎉🎉🎉
 
 
 
