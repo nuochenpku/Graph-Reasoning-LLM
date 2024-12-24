@@ -64,7 +64,7 @@ and diversity of previous benchmarks.
 
 ## Usage & Download
 
-Our checkpoints and dataset are avaliable at HuggingFace. You can directly download them according to the following links:
+Our checkpoints and dataset are available at HuggingFace. You can directly download them according to the following links:
 
 ### 🤗Models🤗
 
